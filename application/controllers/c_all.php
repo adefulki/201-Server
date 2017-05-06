@@ -43,7 +43,7 @@ class c_all extends CI_Controller
                 'status_recommendation' => $this->check_recommendation($item['ID_DAGANGAN']));
             $i++;
         }
-        print json_encode($arr);
+        return json_encode($arr);
     }
 
     function count_all_penilaian($id_dagangan){
