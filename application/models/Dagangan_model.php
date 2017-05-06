@@ -14,9 +14,22 @@ class Dagangan_model extends CI_Model
     /*
      * Get dagangan by ID_DAGANGAN
      */
-    function get_dagangan($ID_DAGANGAN)
+    function get_dagangan_by_id_dagangan($ID_DAGANGAN)
     {
         return $this->db->get_where('DAGANGAN',array('ID_DAGANGAN'=>$ID_DAGANGAN))->row_array();
+    }
+
+    /*
+     * Get dagangan
+     */
+    function get_dagangan($input)
+    {
+        return $this->db->query("SELECT * FROM dagangan, pedagang, produk WHERE 
+        dagangan.NAMA_DAGANGAN = '$input' OR 
+        dagangan.DESKRIPSI_DAGANGAN = '$input' OR
+        pedagang.NAMA_PEDAGANG = '$input' OR 
+        produk.NAMA_PRODUK = '$input' OR 
+        produk.DESKRIPSI_PRODUK = '$input'")->result_array();
     }
     
     /*

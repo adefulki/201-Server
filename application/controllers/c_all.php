@@ -29,6 +29,8 @@ class c_all extends CI_Controller
         $this->display_dagangan_location();
     }
 
+    //mengirim informasi seluruh dagangan untuk ditampilkan pada map
+    //terakhir update: 06/05/2017(Ade)
     function display_dagangan_location(){
         $i=0;
         foreach($this->Dagangan_model->get_all_dagangan() as $item) {
@@ -46,6 +48,8 @@ class c_all extends CI_Controller
         return json_encode($arr);
     }
 
+    //menghitung jumlah penilaian dari pembeli
+    //terakhir update: 06/05/2017(Ade)
     function count_all_penilaian($id_dagangan){
         $sum=0;
         foreach ($this->Produk_model->get_produk_by_id_dagangan($id_dagangan) as $item) {
@@ -54,6 +58,8 @@ class c_all extends CI_Controller
         return $sum;
     }
 
+    //merata-ratakan semua penilaian dari pembeli
+    //terakhir update: 06/05/2017(Ade)
     function mean_all_penilaian($id_dagangan){
         $sum=0;
         $i=0;
@@ -70,6 +76,8 @@ class c_all extends CI_Controller
         return $mean;
     }
 
+    //mengecek apakah pedagang bersangkutan cocok untuk direkomendasikan
+    //terakhir update: 06/05/2017(Ade)
     function check_recommendation($id_dagangan){
         $responden=0;
         $star5=0;
@@ -101,5 +109,41 @@ class c_all extends CI_Controller
             else
                 return false;
         }else return false;
+    }
+
+    //pencarian dagangan berdasarkan kata yang masih diketik
+    //terakhir update: 06/05/2017(Ade)
+    function search_dagangan_from_typing($json){
+        $i=0;
+        $obj=json_decode($json);
+        $input=$obj->{'input'};
+        $lat=$obj->{'lat'};
+        $lng=$obj->{'lng'};
+        foreach($this->Dagangan_model->get_dagangan($input) as $item){
+            $arr[$i]=array(
+                'id_dagangan' => $item['ID_DAGANGAN'],
+                'nama_dagangan' => $item['NAMA_DAGANGAN'],
+                'foto_dagangan' => $item['FOTO_DAGANGAN'],
+                'distance' => $this->haversine_formula($lat,$lng,$item['LAT_DAGANGAN'],$item['LNG_DAGANGAN'])
+            );
+            $i++;
+        }
+    }
+
+    //formula haversine untuk mengetahui jarak
+    //terakhir update: 06/05/2017(Ade)
+    function haversine_formula($latFrom, $lngFrom, $latTo, $lngTo){
+        $earthRadius = 6371000;
+        $latFrom = deg2rad($latFrom);
+        $lngFrom = deg2rad($lngFrom);
+        $latTo = deg2rad($latTo);
+        $lngTo = deg2rad($lngTo);
+
+        $latDelta = $latTo - $latFrom;
+        $lngDelta = $lngTo - $lngFrom;
+
+        $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
+                cos($latFrom) * cos($latTo) * pow(sin($lngDelta / 2), 2)));
+        return $angle * $earthRadius;
     }
 }
