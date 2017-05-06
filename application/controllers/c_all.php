@@ -30,6 +30,14 @@ class c_all extends CI_Controller
     }
 
     //mengirim informasi seluruh dagangan untuk ditampilkan pada map
+    //outputan berupa json dengan struktur
+    /*
+        [{"id_dagangan":id dari dagangan,"nama_dagangan":nama dagangan,
+        "foto_dagangan":string address foto,"lat_dagangan":latitude dagangan,
+        "lng_dagangan":longtitude dagangan,"mean_penilaian_dagangan":rata-rata penilaian,
+        "count_penilaian_dagangan":menghitung jumlah penilaian,
+        "status_recommendation":status cocok untuk direkomendasikan}]
+    */
     //terakhir update: 06/05/2017(Ade)
     function display_dagangan_location(){
         $i=0;
@@ -42,13 +50,16 @@ class c_all extends CI_Controller
                 'lng_dagangan' => $item['LNG_DAGANGAN'],
                 'mean_penilaian_dagangan' => $this->mean_all_penilaian($item['ID_DAGANGAN']),
                 'count_penilaian_dagangan' => $this->count_all_penilaian($item['ID_DAGANGAN']),
-                'status_recommendation' => $this->check_recommendation($item['ID_DAGANGAN']));
+                'status_recommendation' => $this->check_recommendation($item['ID_DAGANGAN'])
+            );
             $i++;
         }
         return json_encode($arr);
     }
 
     //menghitung jumlah penilaian dari pembeli
+    //inputan berupa id dagangan
+    //outputan berupa jumlah penilaian
     //terakhir update: 06/05/2017(Ade)
     function count_all_penilaian($id_dagangan){
         $sum=0;
@@ -59,6 +70,8 @@ class c_all extends CI_Controller
     }
 
     //merata-ratakan semua penilaian dari pembeli
+    //inputan berupa id dagangan
+    //outputan berupa nilai rata-rata
     //terakhir update: 06/05/2017(Ade)
     function mean_all_penilaian($id_dagangan){
         $sum=0;
@@ -77,6 +90,8 @@ class c_all extends CI_Controller
     }
 
     //mengecek apakah pedagang bersangkutan cocok untuk direkomendasikan
+    //inputan berupa id dagangan
+    //outputan berupa boolean true atau false
     //terakhir update: 06/05/2017(Ade)
     function check_recommendation($id_dagangan){
         $responden=0;
@@ -112,6 +127,16 @@ class c_all extends CI_Controller
     }
 
     //pencarian dagangan berdasarkan kata yang masih diketik
+    //inputan berupa json dengan struktur
+    /*
+        {"input":sesuatu yang diinputkan untuk mencari pedagang,
+        "lat":latitude pembeli,"lng":longtitude pembeli}
+    */
+    //outputan berupa json informasi dagangan
+    /*
+        [{"id_dagangan":id dari dagangan,"nama_dagangan":nama dagangan,
+        "foto_dagangan":string address foto,"distance":jarak antara pedagang dan pembeli}]
+    */
     //terakhir update: 06/05/2017(Ade)
     function search_dagangan_from_typing($json){
         $i=0;
@@ -128,9 +153,12 @@ class c_all extends CI_Controller
             );
             $i++;
         }
+        return json_encode($arr);
     }
 
     //formula haversine untuk mengetahui jarak
+    //inputan berupa latitude dan longtitude awal dan tujuan
+    //outputan berupa jarak antara dua lokasi
     //terakhir update: 06/05/2017(Ade)
     function haversine_formula($latFrom, $lngFrom, $latTo, $lngTo){
         $earthRadius = 6371000;
