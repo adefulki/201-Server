@@ -12,7 +12,6 @@ class c_all extends CI_Controller
     {
         parent::__construct();
         $this->load->model('Dagangan_model','',True);
-        $this->load->model('Laporan_model','',True);
         $this->load->model('Notifikasi_model','',True);
         $this->load->model('Obrolan_model','',True);
         $this->load->model('Pedagang_model','',True);
@@ -21,12 +20,12 @@ class c_all extends CI_Controller
         $this->load->model('Pengunjung_model','',True);
         $this->load->model('Penilaian_model','',True);
         $this->load->model('Produk_model','',True);
-        $this->load->model('Tag_model','',True);
         $this->load->database();
     }
 
     function test(){
-        $this->display_dagangan_location();
+
+        $this->haversine_formula(38.898556,-77.037852,38.897147, -77.043934);
     }
 
     //mengirim informasi seluruh dagangan untuk ditampilkan pada map
@@ -34,7 +33,7 @@ class c_all extends CI_Controller
     /*
         [{"id_dagangan":id dari dagangan,"nama_dagangan":nama dagangan,
         "foto_dagangan":string address foto,"lat_dagangan":latitude dagangan,
-        "lng_dagangan":longtitude dagangan,"mean_penilaian_dagangan":rata-rata penilaian,
+        "lng_dagangan":longitude dagangan,"mean_penilaian_dagangan":rata-rata penilaian,
         "count_penilaian_dagangan":menghitung jumlah penilaian,
         "status_recommendation":status cocok untuk direkomendasikan}]
     */
@@ -54,7 +53,7 @@ class c_all extends CI_Controller
             );
             $i++;
         }
-        return json_encode($arr);
+        print json_encode($arr);
     }
 
     //menghitung jumlah penilaian dari pembeli
@@ -130,7 +129,7 @@ class c_all extends CI_Controller
     //inputan berupa json dengan struktur
     /*
         {"input":sesuatu yang diinputkan untuk mencari pedagang,
-        "lat":latitude pembeli,"lng":longtitude pembeli}
+        "lat":latitude pembeli,"lng":longitude pembeli}
     */
     //outputan berupa json informasi dagangan
     /*
@@ -157,7 +156,7 @@ class c_all extends CI_Controller
     }
 
     //formula haversine untuk mengetahui jarak
-    //inputan berupa latitude dan longtitude awal dan tujuan
+    //inputan berupa latitude dan longitude awal dan tujuan
     //outputan berupa jarak antara dua lokasi
     //terakhir update: 06/05/2017(Ade)
     function haversine_formula($latFrom, $lngFrom, $latTo, $lngTo){
@@ -172,6 +171,6 @@ class c_all extends CI_Controller
 
         $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
                 cos($latFrom) * cos($latTo) * pow(sin($lngDelta / 2), 2)));
-        return $angle * $earthRadius;
+        print $angle * $earthRadius;
     }
 }
