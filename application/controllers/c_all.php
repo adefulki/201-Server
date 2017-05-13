@@ -295,4 +295,6 @@ class c_all extends CI_Controller
         if($count!=0) return true;
         else return false;
     }
+
+    //test commit
 }
