@@ -14,10 +14,11 @@ class Pedagang_model extends CI_Model
     /*
      * Get pedagang by ID_PEDAGANG
      */
-    function get_pedagang($ID_PEDAGANG)
+    function get_pedagang($ID_DAGANGAN)
     {
-        return $this->db->get_where('PEDAGANG',array('ID_PEDAGANG'=>$ID_PEDAGANG))->row_array();
+        return $this->db->get_where('PEDAGANG',array('ID_DAGANGAN'=>$ID_DAGANGAN))->row_array();
     }
+
     
     /*
      * Get all pedagang

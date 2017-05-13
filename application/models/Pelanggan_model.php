@@ -18,6 +18,10 @@ class Pelanggan_model extends CI_Model
     {
         return $this->db->get_where('PELANGGAN',array('ID_PELANGGAN'=>$ID_PELANGGAN))->row_array();
     }
+
+    function get_count_pelanggan($ID_DAGANGAN){
+        return $this->db->get_where('PELANGGAN',array('ID_DAGANGAN'=>$ID_DAGANGAN))->num_rows();
+    }
     
     /*
      * Get all pelanggan
@@ -26,7 +30,10 @@ class Pelanggan_model extends CI_Model
     {
         return $this->db->get('PELANGGAN')->result_array();
     }
-    
+
+    function get_count_pelanggan_by_id_pembeli_id_dagangan($ID_PEMBELI, $ID_DAGANGAN){
+        return $this->db->get_where('PELANGGAN',array('ID_DAGANGAN'=>$ID_DAGANGAN, 'ID_PEMBELI'=>$ID_PEMBELI))->num_rows();
+    }
     /*
      * function to add new pelanggan
      */
