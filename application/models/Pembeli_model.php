@@ -26,7 +26,12 @@ class Pembeli_model extends CI_Model
     {
         return $this->db->get('PEMBELI')->result_array();
     }
-    
+
+    function get_count_nohp_pemebli($NOHP_PEMBELI)
+    {
+        return $this->db->get_where('PEMBELI',array('NOHP_PEMBELI'=>$NOHP_PEMBELI))->num_rows();
+    }
+
     /*
      * function to add new pembeli
      */

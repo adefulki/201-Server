@@ -25,10 +25,11 @@ class c_all extends CI_Controller
 
     function test(){
         $arr=array(
-            'id_dagangan' => "ID_DAGANGAN",
-            'id_pembeli' => "ID_PEMBELI"
+            'input' => "NAMA",
+            'lat' => -6.9423305,
+            'lng' => 107.6466958
         );
-        $this->display_detail_dagangan(json_encode($arr));
+        $this->search_dagangan(json_encode($arr));
     }
 
     //mengirim informasi seluruh dagangan untuk ditampilkan pada map
@@ -57,6 +58,7 @@ class c_all extends CI_Controller
             $i++;
         }
 
+        header('Content-Type: application/json');
         return json_encode($arr);
     }
 
@@ -149,17 +151,46 @@ class c_all extends CI_Controller
         $input=$obj->{'input'};
         $lat=$obj->{'lat'};
         $lng=$obj->{'lng'};
-        foreach($this->Dagangan_model->get_dagangan($input) as $item){
+        foreach($this->Dagangan_model->get_dagangan_by_input($input) as $item){
+
             $arr[$i]=array(
-                'id_dagangan' => $item['ID_DAGANGAN'],
-                'nama_dagangan' => $item['NAMA_DAGANGAN'],
-                'foto_dagangan' => $item['FOTO_DAGANGAN'],
-                'distance' => $this->haversine_formula($lat,$lng,$item['LAT_DAGANGAN'],$item['LNG_DAGANGAN'])
+                'id' => $item['ID_DAGANGAN'],
+                'nama' => $item['NAMA_DAGANGAN'],
+                'foto' => $item['FOTO_DAGANGAN'],
+                'jarak' => $this->haversine_formula($lat,$lng,$item['LAT_DAGANGAN'],$item['LNG_DAGANGAN'])
             );
             $i++;
         }
+        foreach($this->Produk_model->get_produk_by_input($input) as $item){
+            foreach($this->Dagangan_model->get_dagangan_by_id_dagangan($item['ID_DAGANGAN']) as $item2) {
+                $lat_dagangan = $item2['LAT_DAGANGAN'];
+                $lng_dagangan = $item2['LNG_DAGANGAN'];
+            }
+            $arr[$i]=array(
+                'id' => $item['ID_DAGANGAN'],
+                'nama' => $item['NAMA_PRODUK'],
+                'foto' => $item['FOTO_PRODUK'],
+                'jarak' => $this->haversine_formula($lat,$lng,$lat_dagangan,$lng_dagangan)
+            );
+            $i++;
+        }
+        foreach($this->Pedagang_model->get_pedagang_by_input($input) as $item){
+            foreach($this->Dagangan_model->get_dagangan_by_id_dagangan($item['ID_DAGANGAN']) as $item2) {
+                $lat_dagangan = $item2['LAT_DAGANGAN'];
+                $lng_dagangan = $item2['LNG_DAGANGAN'];
+            }
+            $arr[$i]=array(
+                'id' => $item['ID_DAGANGAN'],
+                'nama' => $item['NAMA_PEDAGANG'],
+                'foto' => $item['FOTO_PEDAGANG'],
+                'jarak' => $this->haversine_formula($lat,$lng,$lat_dagangan,$lng_dagangan)
+            );
+            $i++;
+        }
+        $arr_sort = $this->array_msort($arr, array('jarak'=>SORT_ASC));
 
-        return json_encode($arr);
+        header('Content-Type: application/json');
+        print json_encode($arr_sort);
     }
 
     //formula haversine untuk mengetahui jarak
@@ -180,6 +211,30 @@ class c_all extends CI_Controller
                 cos($latFrom) * cos($latTo) * pow(sin($lngDelta / 2), 2)));
 
         return $angle * $earthRadius;
+    }
+
+    function array_msort($array, $cols){
+        $colarr = array();
+        foreach ($cols as $col => $order) {
+            $colarr[$col] = array();
+            foreach ($array as $k => $row) { $colarr[$col]['_'.$k] = strtolower($row[$col]); }
+        }
+        $eval = 'array_multisort(';
+        foreach ($cols as $col => $order) {
+            $eval .= '$colarr[\''.$col.'\'],'.$order.',';
+        }
+        $eval = substr($eval,0,-1).');';
+        eval($eval);
+        $ret = array();
+        foreach ($colarr as $col => $arr) {
+            foreach ($arr as $k => $v) {
+                $k = substr($k,1);
+                if (!isset($ret[$k])) $ret[$k] = $array[$k];
+                $ret[$k][$col] = $array[$k][$col];
+            }
+        }
+        return $ret;
+
     }
 
     //menampilkan keseluruhan detail dagangan
@@ -244,6 +299,7 @@ class c_all extends CI_Controller
             );
         }
 
+        header('Content-Type: application/json');
         return json_encode($arr);
     }
 
@@ -294,5 +350,54 @@ class c_all extends CI_Controller
 
         if($count!=0) return true;
         else return false;
+    }
+
+    //mengecek no ponsel
+    //inputan berupa no ponsel
+    //outputan berupa boolean true atau false
+    //terakhir update: 13/05/2017(Ade)
+    function check_nohp($json){
+        $count=0;
+        $obj=json_decode($json);
+        $no_ponsel=$obj->{'no_ponsel'};
+        $count=$count+$this->Pedagang_model->get_count_nohp_pedagang($no_ponsel);
+        $count=$count+$this->Pembeli_model->get_count_nohp_pembeli($no_ponsel);
+        if($count!=0) return false;
+        return true;
+    }
+
+    function create_kode_akses($json){
+        $obj=json_decode($json);
+        $no_ponsel=$obj->{'no_ponsel'};
+        $kode_akses = uniqid();
+        $this->Verifikasi_model->insert_verify($kode_akses);
+        $this->send_verify_account($no_ponsel, $kode_akses);
+    }
+
+    //mengirim pesan verifikasi akun
+    //inputan berupa no ponsel
+    //terakhir update: 18/05/2017(Ade)
+    function send_verify_account($no_ponsel, $kode_akses){
+        // Textlocal account details
+        $username = 'ade.fulki@gmail.com';
+        $hash = '0aa35bc3e41889c2a762d3e6f9d2e648c99e909ca59522791a4f12a7e6baff47';
+
+        // Message details
+        $numbers = array($no_ponsel);
+        $sender = urlencode('PKL Tracer');
+        $message = rawurlencode('Kode akses Anda : '.$kode_akses);
+
+        $numbers = implode(',', $numbers);
+
+        // Prepare data for POST request
+        $data = array('username' => $username, 'hash' => $hash, 'numbers' => $numbers, "sender" => $sender, "message" => $message);
+
+        // Send the POST request with cURL
+        $ch = curl_init('http://api.txtlocal.com/send/');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        curl_close($ch);
     }
 }

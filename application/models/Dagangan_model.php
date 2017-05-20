@@ -20,16 +20,12 @@ class Dagangan_model extends CI_Model
     }
 
     /*
-     * Get dagangan
+     * Get dagangan by input
      */
-    function get_dagangan($input)
+    function get_dagangan_by_input($input)
     {
-        return $this->db->query("SELECT * FROM dagangan, pedagang, produk WHERE 
-        dagangan.NAMA_DAGANGAN LIKE '$input' OR 
-        dagangan.DESKRIPSI_DAGANGAN LIKE '$input' OR
-        pedagang.NAMA_PEDAGANG LIKE '$input' OR 
-        produk.NAMA_PRODUK = LIKE '$input' OR 
-        produk.DESKRIPSI_PRODUK LIKE '$input'")->result_array();
+        return $this->db->query("SELECT * FROM dagangan WHERE MATCH (NAMA_DAGANGAN,DESKRIPSI_DAGANGAN) 
+        AGAINST ('$input' IN NATURAL LANGUAGE MODE)")->result_array();
     }
     
     /*
