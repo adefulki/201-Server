@@ -32,8 +32,8 @@ class Produk_model extends CI_Model
      */
     function get_produk_by_input($input)
     {
-        return $this->db->query("SELECT * FROM produk WHERE MATCH (NAMA_PRODUK, DESKRIPSI_PRODUK)
-        AGAINST ('$input' IN NATURAL LANGUAGE MODE)")->result_array();
+        return $this->db->query("SELECT * FROM PRODUK WHERE MATCH (NAMA_PRODUK)
+        AGAINST ('$input' IN BOOLEAN MODE)")->result_array();
     }
 
     /*

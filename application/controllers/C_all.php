@@ -23,15 +23,6 @@ class c_all extends CI_Controller
         $this->load->database();
     }
 
-    function test(){
-        $arr=array(
-            'input' => "NAMA",
-            'lat' => -6.9423305,
-            'lng' => 107.6466958
-        );
-        $this->search_dagangan(json_encode($arr));
-    }
-
     //mengirim informasi seluruh dagangan untuk ditampilkan pada map
     //outputan berupa json dengan struktur
     /*
@@ -44,6 +35,7 @@ class c_all extends CI_Controller
     //terakhir update: 06/05/2017(Ade)
     function display_dagangan_location(){
         $i=0;
+        $arr=array();
         foreach($this->Dagangan_model->get_all_dagangan() as $item) {
             $arr[$i] = array(
                 'id_dagangan' => $item['ID_DAGANGAN'],
@@ -59,7 +51,7 @@ class c_all extends CI_Controller
         }
 
         header('Content-Type: application/json');
-        return json_encode($arr);
+        echo json_encode($arr);
     }
 
     //menghitung jumlah penilaian dari pembeli
@@ -145,12 +137,13 @@ class c_all extends CI_Controller
         "foto_dagangan":string address foto,"distance":jarak antara pedagang dan pembeli}]
     */
     //terakhir update: 12/05/2017(Ade)
-    function search_dagangan($json){
+    function search_dagangan(){
         $i=0;
-        $obj=json_decode($json);
-        $input=$obj->{'input'};
-        $lat=$obj->{'lat'};
-        $lng=$obj->{'lng'};
+        $obj=json_decode(file_get_contents('php://input'), true);
+        $input=$obj["input"];
+        $lat=$obj["lat"];
+        $lng=$obj["lng"];
+        $arr=array();
         foreach($this->Dagangan_model->get_dagangan_by_input($input) as $item){
 
             $arr[$i]=array(
@@ -189,8 +182,9 @@ class c_all extends CI_Controller
         }
         $arr_sort = $this->array_msort($arr, array('jarak'=>SORT_ASC));
 
+        $arr2 = array('search' =>   $arr);
         header('Content-Type: application/json');
-        print json_encode($arr_sort);
+        echo json_encode($arr2);
     }
 
     //formula haversine untuk mengetahui jarak
@@ -214,7 +208,7 @@ class c_all extends CI_Controller
     }
 
     function array_msort($array, $cols){
-        $colarr = array();
+        $colarr = array(); //initial array
         foreach ($cols as $col => $order) {
             $colarr[$col] = array();
             foreach ($array as $k => $row) { $colarr[$col]['_'.$k] = strtolower($row[$col]); }
@@ -259,14 +253,16 @@ class c_all extends CI_Controller
          "count_penilaian_produk": jumlah penilaian produk}]}
     */
     //terakhir update: 13/05/2017(Ade)
-    function display_detail_dagangan($json){
+    function display_detail_dagangan(){
         $i=0;
-        $obj=json_decode($json);
-        $id_dagangan=$obj->{'id_dagangan'};
-        $id_pembeli=$obj->{'id_pembeli'};
+        $obj=json_decode(file_get_contents('php://input'), true);
+        $id_dagangan=$obj['id_dagangan'];
+        $id_pembeli=$obj['id_pembeli'];
+        $arr=array();
         foreach($this->Dagangan_model->get_dagangan_by_id_dagangan($id_dagangan) as $item) {
             $arr_pedagang = $this->Pedagang_model->get_pedagang($id_dagangan);
             $j=0;
+            $arr_produk=array();
             foreach($this->Produk_model->get_produk_by_id_dagangan($id_dagangan) as $item2) {
                 $arr_produk[$j]=array(
                     'id_produk' => $item2['ID_PRODUK'],
@@ -300,7 +296,7 @@ class c_all extends CI_Controller
         }
 
         header('Content-Type: application/json');
-        return json_encode($arr);
+        echo json_encode($arr);
     }
 
     //merata-ratakan penilaian produk dari pembeli
@@ -356,22 +352,74 @@ class c_all extends CI_Controller
     //inputan berupa no ponsel
     //outputan berupa boolean true atau false
     //terakhir update: 13/05/2017(Ade)
-    function check_nohp($json){
+    function check_nohp(){
         $count=0;
-        $obj=json_decode($json);
-        $no_ponsel=$obj->{'no_ponsel'};
+        $obj=json_decode(file_get_contents('php://input'), true);
+        $no_ponsel=$obj['no_ponsel'];
         $count=$count+$this->Pedagang_model->get_count_nohp_pedagang($no_ponsel);
         $count=$count+$this->Pembeli_model->get_count_nohp_pembeli($no_ponsel);
         if($count!=0) return false;
         return true;
     }
 
-    function create_kode_akses($json){
-        $obj=json_decode($json);
-        $no_ponsel=$obj->{'no_ponsel'};
+    function create_kode_akses(){
+        $obj=json_decode(file_get_contents('php://input'), true);
+        $no_ponsel=$obj['no_ponsel'];
+        $password=$obj['password'];
         $kode_akses = uniqid();
-        $this->Verifikasi_model->insert_verify($kode_akses);
+        $exp_time = date_timestamp_set();
+        $role=$obj->{'role'};
+        if($role == 0){
+            $id_pedagang = $this->create_dagangan($no_ponsel, $password);
+            $arr = array(
+                'ID_PEDAGANG' => $id_pedagang,
+                'KODE_AKSES'=> $kode_akses,
+                'WAKTU_KADALUARSA' => $exp_time
+            );
+            $this->Verifikasi_model->add_verifikasi($arr);
+        }else if ($role == 1){
+            $id_pembeli = $this->create_pembeli($no_ponsel, $password);
+            $arr = array(
+                'ID_PEMBELI' => $id_pembeli,
+                'KODE_AKSES'=> $kode_akses,
+                'WAKTU_KADALUARSA' => $exp_time
+            );
+            $this->Verifikasi_model->add_verifikasi($arr);
+        }
+
         $this->send_verify_account($no_ponsel, $kode_akses);
+    }
+
+    function create_dagangan($nohp_pedagang, $password_pedagang){
+        $id_dagangan = uniqid();
+        $arr = array(
+            'ID_DAGANGAN' => $id_dagangan
+        );
+        $this->Dagangan_model->add_dagangan($arr);
+
+        $id_pedagang = uniqid();
+        $arr2 = array(
+            'ID_PEDAGANG' => $id_pedagang,
+            'NOHP_PEDAGANG'=> $nohp_pedagang,
+            'PASSWORD_PEDAGANG' => $password_pedagang,
+            'STATUS_VERIFIKASI_PEDAGANG' => false
+        );
+        $this->Pedagang_model->add_pedagang($arr2);
+
+        return $id_pedagang;
+    }
+
+    function create_pembeli($nohp_pembeli, $password_pembeli){
+        $id_pembeli = uniqid();
+        $arr = array(
+            'ID_PEMBELI' => $id_pembeli,
+            'NOHP_PEMBELI'=> $nohp_pembeli,
+            'PASSWORD_PEMBELI' => $password_pembeli,
+            'STATUS_VERIFIKASI_PEMBELI' => false
+        );
+        $this->Pembeli_model->add_pembeli($arr);
+
+        return $id_pembeli;
     }
 
     //mengirim pesan verifikasi akun

@@ -24,8 +24,8 @@ class Pedagang_model extends CI_Model
      */
     function get_pedagang_by_input($input)
     {
-        return $this->db->query("SELECT * FROM pedagang WHERE MATCH (NAMA_PEDAGANG)
-        AGAINST ('$input' IN NATURAL LANGUAGE MODE)")->result_array();
+        return $this->db->query("SELECT * FROM PEDAGANG WHERE MATCH (NAMA_PEDAGANG)
+        AGAINST ('$input' IN BOOLEAN MODE)")->result_array();
     }
 
     function get_count_nohp_pedagang($NOHP_PEDAGANG)

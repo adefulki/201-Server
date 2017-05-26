@@ -24,8 +24,8 @@ class Dagangan_model extends CI_Model
      */
     function get_dagangan_by_input($input)
     {
-        return $this->db->query("SELECT * FROM dagangan WHERE MATCH (NAMA_DAGANGAN,DESKRIPSI_DAGANGAN) 
-        AGAINST ('$input' IN NATURAL LANGUAGE MODE)")->result_array();
+        return $this->db->query("SELECT * FROM DAGANGAN WHERE MATCH (NAMA_DAGANGAN) 
+        AGAINST ('$input' IN BOOLEAN MODE)")->result_array();
     }
     
     /*
