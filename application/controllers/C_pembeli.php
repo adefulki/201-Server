@@ -27,17 +27,31 @@ class c_pembeli extends CI_Controller
     function test(){
         $arr=array(
             'id_pembeli' => "01",
+            'id_dagangan' =>"202",
+            'status_notifikasi' => "2",
+            'ulangi_otomatis'=>"1",
+            'jarak'=>"21",
         );
-        $this->display_obrolan(json_encode($arr));
+        $this->update_set_pemberitahuan(json_encode($arr));
     }
 
     /*
      * start of pengaturan akun
      */
+
+    /*
+     * Display akun pembeli, menampilkan akun pembeli yang berisikan
+     * 1. Nama pembeli
+     * 2. Email Pembeli
+     * 3. No Hp Pembeli
+     * 4. Password Pembeli
+     * 5. Alamat Pembeli
+     */
     function display_akun_pembeli($json)
     {
         $obj=json_decode($json);
         $id_pembeli=$obj->{'id_pembeli'};
+
 
         $pembeli = $this->Pembeli_model->get_pembeli($id_pembeli);
 
@@ -45,11 +59,14 @@ class c_pembeli extends CI_Controller
             'nama_pembeli'=> $pembeli['NAMA_PEMBELI'],
             'email_pembeli'=> $pembeli['EMAIL_PEMBELI'],
             'nohp_pembeli' => $pembeli['NOHP_PEMBELI'],
+            'password_pembeli'=> $pembeli['PASSWORD_PEMBELI'],
             'alamat_pembeli'=> $pembeli['ALAMAT_PEMBELI'],
         );
-        print json_encode($arr);
+        header('Content-Type: application/json');
+        echo json_encode($arr);
 
     }
+    // edit no 1. Nama pembeli
 
     function edit_nama_pembeli($json)
     {
@@ -69,7 +86,7 @@ class c_pembeli extends CI_Controller
         );
         $this->Pembeli_model->update_pembeli($id_pembeli,$arr);
     }
-
+    //edit no 2. Email pembeli
     function edit_email_pembeli($json)
     {
         $obj= json_decode($json);
@@ -81,7 +98,7 @@ class c_pembeli extends CI_Controller
         );
         $this->Pembeli_model->update_pembeli($id_pembeli,$arr);
     }
-
+    //edit no 3. No HP pembeli
     function edit_nohp_pembeli($json)
     {
         $obj= json_decode($json);
@@ -93,7 +110,7 @@ class c_pembeli extends CI_Controller
         );
         $this->Pembeli_model->update_pembeli($id_pembeli,$arr);
     }
-
+    // edit no 4. Password pembeli
     function edit_password_pembeli($json)
     {
         $obj= json_decode($json);
@@ -105,7 +122,7 @@ class c_pembeli extends CI_Controller
         );
         $this->Pembeli_model->update_pembeli($id_pembeli,$arr);
     }
-
+    // edit no 5. Alamat Pembeli
     function edit_alamat_pembeli($json)
     {
         $obj= json_decode($json);
@@ -123,6 +140,14 @@ class c_pembeli extends CI_Controller
 
     /*
      * Start of obrolan
+     */
+
+    /*
+     * Display Obrolan antara pembeli dan pkl, yang ditampilkan
+     * 1. Nama Dagangan
+     * 2. Foto Dagangan
+     * 3. Obrolan ( text Terakhir)
+     * 4. Waktu Submit/ waktu update text
      */
     function display_obrolan($json)
     {
@@ -143,9 +168,10 @@ class c_pembeli extends CI_Controller
                 );
                 $i++;
             }
-
-            print json_encode($arr);
-            print json_encode($arr2);
+            header('Content-Type: application/json');
+            echo json_encode($arr);
+            echo json_encode($arr2);
+            // nampilin 2 aray bener kaya gini engga? hehe
         }
         return json_encode($arr);
 
@@ -156,6 +182,14 @@ class c_pembeli extends CI_Controller
 
     /*
      *Start of Berlangganan
+     */
+
+    /*
+     * Display halaman berlangganan antara pembeli dan pkl, yang berisikan
+     * 1. Nama Dagangan
+     * 2. Foto Dagangan
+     * 3. Tipe Dagangan ( ini perlu engga ? )
+     * 4. Status berjualan ( untuk menandakan aktif atau tidak)
      */
     function display_berlangganan($json)
     {
@@ -174,7 +208,8 @@ class c_pembeli extends CI_Controller
                 );
                 $i++;
             }
-            print json_encode($arr);
+            header('Content-Type: application/json');
+            echo json_encode($arr);
         }
         return json_encode($arr);
 
@@ -184,8 +219,45 @@ class c_pembeli extends CI_Controller
      */
 
     /*
-     * start of
+     * start of pemberitahuan
      */
-//header( string: 'Content-Type: application/json');
-//return json_encode($arr);
+    function set_pemberitahuan($json)
+    {
+        $obj= json_decode($json);
+        $id_pembeli=$obj->{'id_pembeli'};
+        $id_dagangan=$obj->{'id_dagangan'};
+        $id_notifikasi=$id_pembeli . "_" . $id_dagangan; // id notifikasi gabungan dari id pembeli dan id pedagang, sehingga tidak ada duplikat id_notifikasi
+        $status_notifikasi=$obj->{'status_notifikasi'};
+        $ulangi_otomatis=$obj->{'ulangi_otomatis'};
+        $jarak=$obj->{'jarak'};
+
+        $arr= array(
+            'ID_NOTIFIKASI'=>$id_notifikasi,
+            'ID_PEMBELI'=>$id_pembeli,
+            'ID_DAGANGAN'=>$id_dagangan,
+            'STATUS_NOTIFIKASI'=>$status_notifikasi,
+            'ULANGI_OTOMATIS'=>$ulangi_otomatis,
+            'JARAK'=>$jarak,
+        );
+        $this->Notifikasi_model->add_notifikasi($arr);
+    }
+
+    function update_set_pemberitahuan($json)
+    {
+        $obj = json_decode($json);
+        $id_pembeli =$obj->{'id_pembeli'};
+        $id_dagangan = $obj->{'id_dagangan'};
+        $id_notifikasi=$id_pembeli . "_" . $id_dagangan;
+        $status_notifikasi=$obj->{'status_notifikasi'};
+
+        $arr=array(
+            "STATUS_NOTIFIKASI" => $status_notifikasi,
+        );
+        $this->Notifikasi_model->update_notifikasi($id_notifikasi,$arr);
+    }
+
+    /*
+     * End of pemberitahuan
+     */
+
 }
