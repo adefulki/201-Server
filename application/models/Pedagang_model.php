@@ -19,6 +19,19 @@ class Pedagang_model extends CI_Model
         return $this->db->get_where('PEDAGANG',array('ID_DAGANGAN'=>$ID_DAGANGAN))->row_array();
     }
 
+    /*
+     * Get pedagang by input
+     */
+    function get_pedagang_by_input($input)
+    {
+        return $this->db->query("SELECT * FROM PEDAGANG WHERE MATCH (NAMA_PEDAGANG)
+        AGAINST ('$input' IN BOOLEAN MODE)")->result_array();
+    }
+
+    function get_count_nohp_pedagang($NOHP_PEDAGANG)
+    {
+        return $this->db->get_where('PEDAGANG',array('NOHP_PEDAGANG'=>$NOHP_PEDAGANG))->num_rows();
+    }
     
     /*
      * Get all pedagang
