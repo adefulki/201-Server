@@ -11,16 +11,24 @@ class c_pembeli extends CI_Controller
     function __construct()
     {
         parent::__construct();
+        $this->load->model('Dagangan_model','',True);
+        $this->load->model('Notifikasi_model','',True);
+        $this->load->model('Obrolan_model','',True);
+        $this->load->model('Pedagang_model','',True);
+        $this->load->model('Pelanggan_model','',True);
         $this->load->model('Pembeli_model','',True);
+        $this->load->model('Pengunjung_model','',True);
+        $this->load->model('Penilaian_model','',True);
+        $this->load->model('Produk_model','',True);
+        $this->load->database();
     }
 
     //contoh json
     function test(){
         $arr=array(
-            'id_pembeli' => "02",
-            'email_pembeli' => "adeh@ajah.com"
+            'id_pembeli' => "01",
         );
-        $this->edit_email_pembeli(json_encode($arr));
+        $this->display_obrolan(json_encode($arr));
     }
 
     /*
@@ -116,10 +124,68 @@ class c_pembeli extends CI_Controller
     /*
      * Start of obrolan
      */
+    function display_obrolan($json)
+    {
+        $obj=json_decode($json);
+        $id_pembeli=$obj->{'id_pembeli'};
+        $i=0;
+        foreach($this-> Obrolan_model->get_obrolan_by_id_pembeli($id_pembeli) as $item){
 
+            foreach($this->Dagangan_model->get_dagangan_by_id_dagangan($item['ID_DAGANGAN']) as $item2 ){
+                $arr[$i]= array(
+                    'nama_dagangan' => $item2['NAMA_DAGANGAN'],
+                    'foto_dagangan' => $item2['FOTO_DAGANGAN'],
+//                    'kategori_dagangan'=> $item2['KATEGORI_DAGANGAN'],
+                );
+                $arr2[$i]=array(
+                    'text'=> $item['TEXT'],
+                    'waktu_pengiriman' => $item['WAKTU_PENGIRIMAN'],
+                );
+                $i++;
+            }
 
+            print json_encode($arr);
+            print json_encode($arr2);
+        }
+        return json_encode($arr);
+
+    }
     /*
      * end of obrolan
      */
 
+    /*
+     *Start of Berlangganan
+     */
+    function display_berlangganan($json)
+    {
+        $obj=json_decode($json);
+        $id_pembeli=$obj->{'id_pembeli'};
+        $i=0;
+        foreach($this-> Pelanggan_model->get_pelanggan_by_pembeli($id_pembeli) as $item){
+
+            foreach($this->Dagangan_model->get_dagangan_by_id_dagangan($item['ID_DAGANGAN']) as $item2 ){
+            $arr[$i]= array(
+                    'nama_dagangan' => $item2['NAMA_DAGANGAN'],
+                    'tipe_dagangan' => $item2['TIPE_DAGANGAN'],
+                    'foto_dagangan' => $item2['FOTO_DAGANGAN'],
+                    'status_berjualan' => $item2['STATUS_BERJUAAN'],
+//                    'kategori_dagangan'=> $item2['KATEGORI_DAGANGAN'],
+                );
+                $i++;
+            }
+            print json_encode($arr);
+        }
+        return json_encode($arr);
+
+    }
+    /*
+     * End Of Berlangganan
+     */
+
+    /*
+     * start of
+     */
+//header( string: 'Content-Type: application/json');
+//return json_encode($arr);
 }

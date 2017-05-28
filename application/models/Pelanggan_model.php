@@ -22,6 +22,16 @@ class Pelanggan_model extends CI_Model
     function get_count_pelanggan($ID_DAGANGAN){
         return $this->db->get_where('PELANGGAN',array('ID_DAGANGAN'=>$ID_DAGANGAN))->num_rows();
     }
+
+
+    /*
+     * Get pelanggan by ID_PEMBELI
+     */
+    function get_pelanggan_by_pembeli($ID_PEMBELI)
+    {
+        return $this->db->get_where('PELANGGAN',array('ID_PEMBELI'=>$ID_PEMBELI))->result_array();
+    }
+
     
     /*
      * Get all pelanggan

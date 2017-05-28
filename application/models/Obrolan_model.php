@@ -26,6 +26,14 @@ class Obrolan_model extends CI_Model
     {
         return $this->db->get('OBROLAN')->result_array();
     }
+
+    /*
+     * Get obrolan by id pembeli
+     */
+    function get_obrolan_by_id_pembeli($ID_PEMBELI)
+    {
+        return $this->db->get_where('OBROLAN',array('ID_PEMBELI'=>$ID_PEMBELI))->result_array();
+    }
     
     /*
      * function to add new obrolan
