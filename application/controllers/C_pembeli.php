@@ -27,12 +27,9 @@ class c_pembeli extends CI_Controller
     function test(){
         $arr=array(
             'id_pembeli' => "01",
-            'id_dagangan' =>"202",
-            'status_notifikasi' => "2",
-            'ulangi_otomatis'=>"1",
-            'jarak'=>"21",
+            'id_produk' => "55442",
         );
-        $this->update_set_pemberitahuan(json_encode($arr));
+        $this->display_penilaian_produk(json_encode($arr));
     }
 
     /*
@@ -259,4 +256,60 @@ class c_pembeli extends CI_Controller
      * End of pemberitahuan
      */
 
+    /*
+     * Start of menilai dagangan
+     */
+
+    function display_penilaian_produk($json)
+    {
+        $obj = json_decode($json);
+        $id_pembeli = $obj->{'id_pembeli'};
+        $id_produk = $obj->{'id_produk'};
+        $id_penilaian = $id_pembeli . "_" . $id_produk;
+        $i=0;
+        foreach($this-> Penilaian_model->get_penilaian_by_id_penilaian($id_penilaian) as $item){
+
+            foreach($this->Produk_model->get_produk_by_id_produk($item['ID_PRODUK']) as $item2 ){
+                $arr[$i]= array(
+                    'nama_produk' => $item2['NAMA_PRODUK'],
+                    'foto_produk' => $item2['FOTO_PRODUK'],
+                    'nilai_produk' => $item['NILAI_PRODUK'],
+                );
+
+                $i++;
+            }
+            header('Content-Type: application/json');
+            echo json_encode($arr);
+        }
+
+    }
+
+    function add_penilaian_produk($json)
+    {
+        $obj = json_decode($json);
+        $id_pembeli = $obj->{'id_pembeli'};
+        $id_produk = $obj->{'id_produk'};
+        $id_penilaian = $id_pembeli . "_" . $id_produk;
+        $nilai_produk = $obj->{'nilai_produk'};
+        $deskripsi_penilaian_produk = $obj->{'deskripsi_penilaian_produk'};
+
+        $arr = array(
+            "ID_PEMBELI" => $id_pembeli,
+            "ID_PRODUK" => $id_produk,
+            "ID_PENILAIAN" => $id_penilaian,
+            "NILAI_PRODUK" => $nilai_produk,
+            "DESKRIPSI_PENILAIAN_PRODUK" => $deskripsi_penilaian_produk,
+        );
+        $this->Penilaian_model->add_penilaian($arr);
+
+
+    }
+    /*
+     * End Of menilai dagangan
+     */
+
+    //yang kurang berdasarkan mockup
+    // isi dari chatting obrolan, ngeklik obrolan(mockup 13-18)
+    // pindai qr code (mockup 5)
+    // menampilkan halaman untuk menilai
 }
