@@ -93,7 +93,7 @@ class C_pedagang extends CI_Controller
             $arr[$i] = array(
                 'id_pedagang'=> $item['ID_PELANGGAN'],
                 'id_pembeli'=> $item['ID_PEMBELI'],
-                'foto_pelanggan' => $item['FOTO_PELANGGAN']);
+                'foto_pelanggan' => $item['FOTO_PEMBELI']);
             $i++;
         }
         print json_encode($arr);
@@ -204,15 +204,20 @@ class C_pedagang extends CI_Controller
      */
 
     /*
-* start of pengaturan akun
+* start of penilaian
 */
     /*
-     * Display Qrcode saya, menampilkan Qrcode saya yang berisikan
-     * 1. foto pedagang
-     * 2. nama pedagang
-     * 3. email pedagang
-     * 4. no hp Pedagang
-     * 5. Password
-     * 6. alamat pedagang
+     * Display penilaian, menampilkan penialian yang berisikan
+     * 1. status berjualan
+     * 2. Foto dagangan
+     * 3. nama dagangan
+     * 3. deskripsi
+     * 4. menampilkan lokasi berjualan
+     * 5. statistik
+     * 6. peringkat
      */
+
+    function penilaian_pedagang($json){
+
+    }
 }
