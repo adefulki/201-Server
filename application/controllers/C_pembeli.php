@@ -162,7 +162,7 @@ class c_pembeli extends CI_Controller
                     'foto_dagangan' => $item2['FOTO_DAGANGAN'],
 //                    'kategori_dagangan'=> $item2['KATEGORI_DAGANGAN'],
                 );
-                $arr2[$i]=array(
+                $arr[$i]=array(
                     'text'=> $item['TEXT'],
                     'waktu_pengiriman' => $item['WAKTU_PENGIRIMAN'],
                 );
@@ -170,10 +170,9 @@ class c_pembeli extends CI_Controller
             }
             header('Content-Type: application/json');
             echo json_encode($arr);
-            echo json_encode($arr2);
             // nampilin 2 aray bener kaya gini engga? hehe
         }
-        return json_encode($arr);
+//        return json_encode($arr);
 
     }
     /*
@@ -211,7 +210,7 @@ class c_pembeli extends CI_Controller
             header('Content-Type: application/json');
             echo json_encode($arr);
         }
-        return json_encode($arr);
+//        return json_encode($arr);
 
     }
     /*
