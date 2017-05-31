@@ -52,7 +52,6 @@ class c_pembeli extends CI_Controller
         $obj=json_decode($json);
         $id_pembeli=$obj->{'id_pembeli'};
 
-
         $pembeli = $this->Pembeli_model->get_pembeli($id_pembeli);
 
         $arr = array(

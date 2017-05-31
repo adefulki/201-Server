@@ -22,6 +22,8 @@ class C_pedagang extends CI_Controller
         $this->load->model('Produk_model', '', True);
         $this->load->database();
     }
+    
+
     /*
   * start of akun pedagang
   */
@@ -33,13 +35,14 @@ class C_pedagang extends CI_Controller
      * 3. Email pedagang
      * 4. Foto Pedagang
      */
-    function display_akun_pedagang($json)
+    function display_akun_pedagang()
     {
-        $obj=json_decode($json);
-        $id_pedagang=$obj->{'id_pedagang'};
-        $pedagang = $this->Pedagang_model->get_Pedagang($id_pedagang);
+        $obj=json_decode(file_get_contents('php://input'), true);
+        $id_dagangan=$obj['id_dagangan'];
+        print($id_dagangan);
+        $pedagang = $this->Pedagang_model->get_Pedagang($id_dagangan);
         $arr = array(
-            'id_pedagang'=> $pedagang['ID_DAGANGAN'],
+            'id_dagangan'=> $pedagang['ID_DAGANGAN'],
             'email_pedagang' => $pedagang['EMAIL_PEDAGANG'],
             'foto_pedagang'=> $pedagang['FOTO_PEDAGANG'],
 
@@ -96,7 +99,8 @@ class C_pedagang extends CI_Controller
                 'foto_pelanggan' => $item['FOTO_PEMBELI']);
             $i++;
         }
-        print json_encode($arr);
+        header('Content-Type: application/json');
+        echo json_encode($arr);
     }
     /*
     * End of pengaturan akun
@@ -116,11 +120,11 @@ class C_pedagang extends CI_Controller
      */
 
     // edit no 1. Foto pedagang
-    function edit_foto_pedagang($json)
+    function edit_foto_pedagang()
     {
-        $obj= json_decode($json);
-        $id_pedagang=$obj->{'id_pedagang'};
-        $foto_pedagang=$obj->{'foto_pedagang'};
+        $obj= json_decode(file_get_contents('php://input'), true);
+        $id_pedagang=$obj['id_pedagang'];
+        $foto_pedagang=$obj['foto_pedagang'];
 
         $arr = array(
             'FOTO_PEDAGANG'=>$foto_pedagang
@@ -129,18 +133,18 @@ class C_pedagang extends CI_Controller
     }
 
     // edit no 2. Nama pedagang
-    function edit_nama_pedagang($json)
+    function edit_nama_pedagang()
     {
         /*
          * mendecode json kedalam variabel obj
          */
-        $obj= json_decode($json);
+        $obj= json_decode(file_get_contents('php://input'), true);
 
         /*
          * memisahkan atribut
          */
-        $id_pedagang=$obj->{'id_pedagang'};
-        $nama_pedagang=$obj->{'nama_pedagang'};
+        $id_pedagang=$obj['id_pedagang'];
+        $nama_pedagang=$obj['nama_pedagang'];
 
         $arr = array(
             'NAMA_PEDAGANG'=>$nama_pedagang
@@ -149,11 +153,11 @@ class C_pedagang extends CI_Controller
     }
 
     //edit no 3. Email pedagang
-    function edit_email_pedagang($json)
+    function edit_email_pedagang()
     {
-        $obj= json_decode($json);
-        $id_pedagang=$obj->{'id_pedagang'};
-        $email_pedagang=$obj->{'email_pedagang'};
+        $obj= json_decode(file_get_contents('php://input'), true);
+        $id_pedagang=$obj['id_pedagang'];
+        $email_pedagang=$obj['email_pedagang'];
 
         $arr = array(
             'EMAIL_PEDAGANG'=>$email_pedagang
@@ -162,11 +166,11 @@ class C_pedagang extends CI_Controller
     }
 
     //edit no 4. No HP pedagang
-    function edit_nohp_pedagang($json)
+    function edit_nohp_pedagang()
     {
-        $obj= json_decode($json);
-        $id_pedagang=$obj->{'id_pedagang'};
-        $nohp_pedagang=$obj->{'nohp_pedagang'};
+        $obj= json_decode(file_get_contents('php://input'), true);
+        $id_pedagang=$obj['id_pedagang'];
+        $nohp_pedagang=$obj['nohp_pedagang'];
 
         $arr = array(
             'NOHP_PEDAGANG'=>$nohp_pedagang
@@ -175,11 +179,11 @@ class C_pedagang extends CI_Controller
     }
 
     // edit no 4. Password pedagang
-    function edit_password_pedagang($json)
+    function edit_password_pedagang()
     {
-        $obj= json_decode($json);
-        $id_pedagang=$obj->{'id_pedagang'};
-        $password_pedagang=$obj->{'password_pedagang'};
+        $obj= json_decode(file_get_contents('php://input'), true);
+        $id_pedagang=$obj['id_pedagang'];
+        $password_pedagang=$obj['password_pedagang'];
 
         $arr = array(
             'PASSWORD_PEDAGANG'=>$password_pedagang
@@ -188,11 +192,11 @@ class C_pedagang extends CI_Controller
     }
 
     // edit no 5. Alamat pedagang
-    function edit_alamat_pedagang($json)
+    function edit_alamat_pedagang()
     {
-        $obj= json_decode($json);
-        $id_pedagang=$obj->{'id_pedagang'};
-        $alamat_pedagang=$obj->{'alamat_pedagang'};
+        $obj= json_decode(file_get_contents('php://input'), true);
+        $id_pedagang=$obj['id_pedagang'];
+        $alamat_pedagang=$obj['alamat_pedagang'];
 
         $arr = array(
             'ALAMAT_PEDAGANG'=>$alamat_pedagang
