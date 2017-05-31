@@ -16,7 +16,7 @@ class Produk_model extends CI_Model
      */
     function get_produk_by_id_produk($ID_PRODUK)
     {
-        return $this->db->get_where('PRODUK',array('ID_PRODUK'=>$ID_PRODUK))->row_array();
+        return $this->db->get_where('PRODUK',array('ID_PRODUK'=>$ID_PRODUK))->result_array();
     }
 
     /*
