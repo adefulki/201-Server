@@ -220,8 +220,18 @@ class C_pedagang extends CI_Controller
      * 5. statistik
      * 6. peringkat
      */
+    function penilaian_pedagang()
+    {
+        $obj= json_decode(file_get_contents('php://input'), true);
+        $id_dagangan=$obj['id_dagangan'];
+        $nama_dagangan=$obj['nama_dagangan'];
 
-    function penilaian_pedagang($json){
-
+        $arr = array(
+            'NAMA_DAGANGAN'=>$nama_dagangan
+        );
+        $this->Dagangan_model->update_pembeli($id_dagangan,$arr);
     }
+    /*
+     * End of pengaturan akun
+     */
 }
