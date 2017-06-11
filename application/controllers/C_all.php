@@ -45,13 +45,16 @@ class c_all extends CI_Controller
                 'lng_dagangan' => $item['LNG_DAGANGAN'],
                 'mean_penilaian_dagangan' => $this->mean_all_penilaian_dagangan($item['ID_DAGANGAN']),
                 'count_penilaian_dagangan' => $this->count_all_penilaian_dagangan($item['ID_DAGANGAN']),
-                'status_recommendation' => $this->check_recommendation($item['ID_DAGANGAN'])
+                'status_recommendation' => $this->check_recommendation($item['ID_DAGANGAN']),
+                'status_berjualan' => filter_var($item['STATUS_BERJUALAN'], FILTER_VALIDATE_BOOLEAN),
+                'tipe_dagangan' => filter_var($item['TIPE_DAGANGAN'], FILTER_VALIDATE_BOOLEAN)
             );
             $i++;
         }
+        $arr2 = array('result_dagangan_location'=>$arr);
 
         header('Content-Type: application/json');
-        echo json_encode($arr);
+        echo json_encode($arr2);
     }
 
     //menghitung jumlah penilaian dari pembeli
@@ -181,8 +184,8 @@ class c_all extends CI_Controller
             $i++;
         }
         $arr_sort = $this->array_msort($arr, array('jarak'=>SORT_ASC));
+        $arr2 = array('result_search' =>   $arr);
 
-        $arr2 = array('search' =>   $arr);
         header('Content-Type: application/json');
         echo json_encode($arr2);
     }
@@ -294,9 +297,10 @@ class c_all extends CI_Controller
                 'produk' => $arr_produk
             );
         }
+        $arr2 = array('result_detail_dagangan'=>$arr);
 
         header('Content-Type: application/json');
-        echo json_encode($arr);
+        echo json_encode($arr2);
     }
 
     //merata-ratakan penilaian produk dari pembeli
