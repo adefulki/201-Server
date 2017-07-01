@@ -9,20 +9,23 @@
 class Notifikasi_controller extends CI_Controller
 {
     private $notifikasiModel;
+    private $obrolanModel;
     function __construct()
     {
         parent::__construct();
         $this->load->model('Notifikasi_model','',True);
         $this->notifikasiModel = new Notifikasi_model();
+        $this->load->model('Obrolan_model','',True);
+        $this->obrolanModel = new Obrolan_model();
     }
 
     function changeStatusNotifikasi(){
         $obj=json_decode(file_get_contents('php://input'), true);
-        $idDagangan=$obj['idNotifikasi'];
+        $idNotifikasi=$obj['idNotifikasi'];
         $jarakNotifikasi=$obj['jarakNotifikasi'];
         $statusNotifikasi=$obj['statusNotifikasi'];
 
-        $this->notifikasiModel->updateNotifikasi($idDagangan, $jarakNotifikasi, $statusNotifikasi);
+        $this->notifikasiModel->updateNotifikasi($idNotifikasi, $jarakNotifikasi, $statusNotifikasi);
     }
 
     //formula haversine untuk mengetahui jarak
@@ -49,6 +52,23 @@ class Notifikasi_controller extends CI_Controller
         if($jarakHaversine <= $jarakNotifikasi)
             return true;
         else return false;
+    }
+
+    function checkNotifikasi(){
+        $obj=json_decode(file_get_contents('php://input'), true);
+        $idPembeli=$obj['idPembeli'];
+        $latPembeli=$obj['latPembeli'];
+        $lngPembeli=$obj['lngPembeli'];
+
+        foreach ($this->notifikasiModel->selectNotifikasiPembeli($idPembeli) as $item){
+            $jarakHaversine = $this->checkHaversineFormula($latPembeli,$lngPembeli,$item['latDagangan'],$item['lngDagangan']);
+            $statusInRange = $this->checkDistance($jarakHaversine, $item['jarakNotifikasi']);
+            if ($statusInRange == true){
+                $text=$this->createText()
+                $this->obrolanModel->insertObrolan($item['latDagangan'],$idPembeli,$text,$idPembeli);
+                $this->sendNotifikasi()
+            }
+        }
     }
 
 

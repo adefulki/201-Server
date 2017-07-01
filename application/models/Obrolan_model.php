@@ -11,4 +11,14 @@ class Obrolan_model extends CI_Model
         parent::__construct();
     }
 
+    function insertObrolan($idDagangan, $idPembeli, $text, $sender){
+        $idObrolan = uniqid();
+        if ($sender = $idDagangan){
+            $this->db->query("INSERT INTO `OBROLAN`(`idObrolan`, `idDaganganPengirim`, `idPembeliPenerima`, `text`, `waktuPengiriman`, `statusMelihat`) VALUES 
+                              ('$idObrolan', '$idDagangan', '$idPembeli', '$text', now(), False)");
+        }else{
+            $this->db->query("INSERT INTO `OBROLAN`(`idObrolan`, `idDaganganPenerima`, `idPembeliPengirim`, `text`, `waktuPengiriman`, `statusMelihat`) VALUES 
+                              ('$idObrolan', '$idDagangan', '$idPembeli', '$text', now(), False)");
+        }
+    }
 }

@@ -6,10 +6,12 @@
  * Date: 6/14/2017
  * Time: 10:11 PM
  */
+include 'Verifikasi_controller.php';
 class Pembeli_controller extends CI_Controller
 {
     private $pembeliModel;
     private $verifikasiModel;
+    private $verifikasiController;
 
     function __construct()
     {
@@ -18,6 +20,7 @@ class Pembeli_controller extends CI_Controller
         $this->pembeliModel = new Pembeli_model();
         $this->load->model('Verifikasi_model','',True);
         $this->verifikasiModel = new Verifikasi_model();
+        $this->verifikasiController = new Verifikasi_controller();
     }
 
     // edit no 1. Nama pembeli
@@ -93,18 +96,18 @@ class Pembeli_controller extends CI_Controller
     function editNoPonselPembeli()
     {
         $arr = (Object) array();
-        /*
-         * mendecode json kedalam variabel obj
-         */
         $obj= json_decode(file_get_contents('php://input'),true);
-
-        /*
-         * memisahkan atribut
-         */
         $idPembeli=$obj['idPembeli'];
         $noPonselPembeli=$obj['noPonselPembeli'];
 
+        $kodeAkses = $this->verifikasiController->createKodeAkses();
+        $waktuKadaluarsa = $this->verifikasiController->createWaktuKadaluarsa();
+
         $this->pembeliModel->updateNoPonselPembeli($idPembeli,$noPonselPembeli);
+        $this->pembeliModel->updateStatusVerifikasiPembeli($idPembeli);
+        $this->verifikasiModel->insertVerifikasiPembeli($idPembeli,$kodeAkses,$waktuKadaluarsa);
+
+        $this->verifikasiController->sendVerifyAccount()
     }
 
     function editFotoPembeli()

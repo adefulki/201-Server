@@ -9,11 +9,17 @@
 class Verifikasi_controller extends CI_Controller
 {
     private $verifikasiModel;
+    private $pembeliModel;
+    private $pedagangModel;
     function __construct()
     {
         parent::__construct();
         $this->load->model('Verifikasi_model','',True);
         $this->verifikasiModel = new Verifikasi_model();
+        $this->load->model('Pembeli_model','',True);
+        $this->pembeliModel = new Pembeli_model();
+        $this->load->model('Pedagang_model','',True);
+        $this->pedagangModel = new Pedagang_model();
     }
 
     function createKodeAkses(){
@@ -33,6 +39,28 @@ class Verifikasi_controller extends CI_Controller
 
         $statusValid = $this->verifikasiModel->isValidVerifikasi($idPedagang,"",$kodeAkses);
 
+        if ($statusValid == true){
+            $this->pedagangModel->updateStatusVerifikasiPedagang($idPedagang);
+            $this->verifikasiModel->deleteVerifikasi(null,$idPedagang);
+        }
+
+        $arr=array('statusValid'=>$statusValid);
+
+        header('Content-Type: application/json');
+        echo json_encode($arr);
+    }
+
+    function checkKodeAksesPembeli(){
+        $obj=json_decode(file_get_contents('php://input'), true);
+        $idPembeli= $obj['idPembeli'];
+        $kodeAkses= $obj['kodeAkses'];
+
+        $statusValid = $this->verifikasiModel->isValidVerifikasi("",$idPembeli,$kodeAkses);
+
+        if ($statusValid == true){
+            $this->pembeliModel->updateStatusVerifikasiPembeli($idPembeli);
+            $this->verifikasiModel->deleteVerifikasi($idPembeli,null);
+        }
         $arr=array('statusValid'=>$statusValid);
 
         header('Content-Type: application/json');

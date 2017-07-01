@@ -16,6 +16,9 @@ class Notifikasi_model extends CI_Model
     }
 
     function selectNotifikasiPembeli($idPembeli){
-        return $this->db->query("SELECT * FROM `NOTIFIKASI` WHERE `idPembeli`='$idPembeli'")->result_array();
+        return $this->db->query("SELECT NOTIFIKASI.idDagangan, DAGANGAN.latDagangan,
+                                DAGANGAN.lngDagangan, NOTIFIKASI.jarakNotifikasi FROM
+                                `NOTIFIKASI`, `DAGANGAN` WHERE DAGANGAN.idPembeli ='$idPembeli' 
+                                AND NOTIFIKASI.idDagangan = DAGANGAN.idDagangan ")->result_array();
     }
 }

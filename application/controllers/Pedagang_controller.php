@@ -9,12 +9,17 @@
 class Pedagang_controller extends CI_Controller
 {
     private $pedagangModel;
-    
+    private $verifikasiModel;
+    private $verifikasiController;
+
     function __construct()
     {
         parent::__construct();
         $this->load->model('Pedagang_model','',True);
         $this->pedagangModel = new Pedagang_model();
+        $this->load->model('Verifikasi_model','',True);
+        $this->verifikasiModel = new Verifikasi_model();
+        $this->verifikasiController = new Verifikasi_controller();
     }
 
     function editNamaPedagang()
@@ -48,7 +53,7 @@ class Pedagang_controller extends CI_Controller
         $idPedagang=$obj['idPedagang'];
         $emailPedagang=$obj['emailPedagang'];
 
-        $this->PedagangModel->updateEmailPedagang($idPedagang,$emailPedagang);
+        $this->pedagangModel->updateEmailPedagang($idPedagang,$emailPedagang);
     }
 
     function editPasswordPedagang()
@@ -65,7 +70,7 @@ class Pedagang_controller extends CI_Controller
         $idPedagang=$obj['idPedagang'];
         $passwordPedagang=$obj['passwordPedagang'];
 
-        $this->PedagangModel->updatePasswordPedagang($idPedagang,$passwordPedagang);
+        $this->pedagangModel->updatePasswordPedagang($idPedagang,$passwordPedagang);
     }
 
     function editAlamatPedagang()
@@ -82,24 +87,25 @@ class Pedagang_controller extends CI_Controller
         $idPedagang=$obj['idPedagang'];
         $alamatPedagang=$obj['alamatPedagang'];
 
-        $this->PedagangModel->updateAlamatPedagang($idPedagang,$alamatPedagang);
+        $this->pedagangModel->updateAlamatPedagang($idPedagang,$alamatPedagang);
     }
 
     function editNoPonselPedagang()
     {
         $arr = (Object) array();
-        /*
-         * mendecode json kedalam variabel obj
-         */
         $obj= json_decode(file_get_contents('php://input'),true);
 
-        /*
-         * memisahkan atribut
-         */
         $idPedagang=$obj['idPedagang'];
         $noPonselPedagang=$obj['noPonselPedagang'];
 
-        $this->PedagangModel->updateNoPonselPedagang($idPedagang,$noPonselPedagang);
+        $kodeAkses = $this->verifikasiController->createKodeAkses();
+        $waktuKadaluarsa = $this->verifikasiController->createWaktuKadaluarsa();
+
+        $this->pedagangModel->updateNoPonselPedagang($idPedagang,$noPonselPedagang);
+        $this->pedagangModel->updateStatusVerifikasiPedagang($idPedagang);
+        $this->verifikasiModel->insertVerifikasiPedagang($idPedagang,$kodeAkses,$waktuKadaluarsa);
+
+        $this->verifikasiController->sendVerifyAccount()
     }
 
     function editFotoPedagang()
