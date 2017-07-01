@@ -126,4 +126,16 @@ class Pedagang_controller extends CI_Controller
 
         $this->pedagangModel->insertPedagang($noPonselPedagang, $passwordPedagang);
     }
+
+    function checkPasswordPedagang(){
+        $obj= json_decode(file_get_contents('php://input'),true);
+        $idPedagang=$obj['idPedagang'];
+        $passwordPedagang=$obj['passwordPedagang'];
+        $statusValidPassword = $this->pedagangModel->isValidPasswordPedagang($idPedagang,$passwordPedagang);
+
+        $arr = array('statusValidPassword'<=$statusValidPassword);
+
+        header('Content-Type: application/json');
+        echo json_encode($arr);
+    }
 }

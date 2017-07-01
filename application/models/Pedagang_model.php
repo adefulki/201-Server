@@ -58,4 +58,10 @@ class Pedagang_model extends CI_Model
         $this->db->query("INSERT INTO `PEDAGANG`(`idPedagang`, `noPonselPedagang`, `passwordPedagang`, `statusVerifikasiPedagang`) VALUES
                         ('$idPedagang','$noPonselPedagang','$passwordPedagang',False)");
     }
+
+    function isValidPasswordPedagang($idPedagang, $passwordPedagang){
+        if($this->db->query("SELECT * FROM `PEDAGANG` WHERE `idPedagang` = '$idPedagang' AND `passwordPedagang` = '$passwordPedagang'")->num_rows() > 0)
+            return true;
+        else return false;
+    }
 }

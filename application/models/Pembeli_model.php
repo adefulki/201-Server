@@ -51,4 +51,10 @@ class Pembeli_model extends CI_Model
     function updateDetailPembeli($idPembeli, $namaPembeli, $alamatPembeli, $fotoPembeli){
         $this->db->query("UPDATE `PEMBELI` SET `namaPembeli`='$namaPembeli', `alamatPembeli`='$alamatPembeli', `fotoPembeli`='$fotoPembeli' WHERE `idPembeli` = '$idPembeli'");
     }
+
+    function isValidPasswordPembeli($idPembeli, $passwordPembeli){
+        if($this->db->query("SELECT * FROM `PEMBELI` WHERE `idPembeli` = '$idPembeli' AND `passwordPembeli` = '$passwordPembeli'")->num_rows() > 0)
+            return true;
+        else return false;
+    }
 }
