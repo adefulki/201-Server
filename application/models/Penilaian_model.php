@@ -11,82 +11,32 @@ class Penilaian_model extends CI_Model
         parent::__construct();
     }
 
-    function get_penilaian($params)
-    {
-        return $this->db->get_where('PENILAIAN',$params);
+    function countPenilaian($idDagangan){
+        return $this->db->query("SELECT * FROM PENILAIAN, PRODUK, DAGANGAN 
+                                WHERE PENILAIAN.idProduk = PRODUK.idProduk AND 
+                                PRODUK.idDagangan = DAGANGAN.idDagangan AND 
+                                DAGANGAN.idDagangan = '$idDagangan'")->num_rows();
     }
 
-    /*
-     * Get penilaian by ID_PENILAIAN
-     */
-    function get_penilaian_by_id_penilaian($ID_PENILAIAN)
-    {
-        return $this->db->get_where('PENILAIAN',array('ID_PENILAIAN'=>$ID_PENILAIAN))->result_array();
+    function selectPenilaian($idDagangan){
+        return $this->db->query("SELECT * FROM PENILAIAN, PRODUK, DAGANGAN 
+                                WHERE PENILAIAN.idProduk = PRODUK.idProduk AND 
+                                PRODUK.idDagangan = DAGANGAN.idDagangan AND 
+                                DAGANGAN.idDagangan = '$idDagangan'")->result_array();
     }
 
-    /*
-     * Get count penilaian by ID_PENILAIAN
-     */
-    function get_count_penilaian($ID_PRODUK)
-    {
-        return $this->db->get_where('PENILAIAN',array('ID_PRODUK'=>$ID_PRODUK))->num_rows();
+    function selectPenilaianProduk($idProduk){
+        return $this->db->query("SELECT * FROM PENILAIAN WHERE PENILAIAN.idProduk = '$idProduk'")->result_array();
     }
 
-    /*
-     * Get penilaian by ID_PRODUK
-     */
-    function get_penilaian_by_id_produk($ID_PRODUK)
-    {
-        return $this->db->get_where('PENILAIAN',array('ID_PRODUK'=>$ID_PRODUK))->result_array();
+    function countPenilaianProduk($idProduk){
+        return $this->db->query("SELECT * FROM PENILAIAN WHERE PENILAIAN.idProduk = '$idProduk'")->num_rows();
     }
 
-    /*
-     * Get all penilaian
-     */
-    function get_all_penilaian()
-    {
-        return $this->db->get('PENILAIAN')->result_array();
-    }
-    
-    /*
-     * function to add new penilaian
-     */
-    function add_penilaian($params)
-    {
-        $this->db->insert('PENILAIAN',$params);
-        return $this->db->insert_id();
-    }
-    
-    /*
-     * function to update penilaian
-     */
-    function update_penilaian($ID_PENILAIAN,$params)
-    {
-        $this->db->where('ID_PENILAIAN',$ID_PENILAIAN);
-        $response = $this->db->update('PENILAIAN',$params);
-        if($response)
-        {
-            return "penilaian updated successfully";
-        }
-        else
-        {
-            return "Error occuring while updating penilaian";
-        }
-    }
-    
-    /*
-     * function to delete penilaian
-     */
-    function delete_penilaian($ID_PENILAIAN)
-    {
-        $response = $this->db->delete('PENILAIAN',array('ID_PENILAIAN'=>$ID_PENILAIAN));
-        if($response)
-        {
-            return "penilaian deleted successfully";
-        }
-        else
-        {
-            return "Error occuring while deleting penilaian";
-        }
+    function insertPenilaian($idPembeli, $idProduk, $nilaiPenilaian, $deskripsiPenilaian){
+        $idPenilaian = uniqid();
+
+        $this->db->query("INSERT INTO `PENILAIAN`  (`idPenilaian`, `idPembeli`, `idProduk`, `nilaiPenilaian`, `deskripsiPenilaian`) VALUES 
+                        ('$idPenilaian', '$idPembeli', '$idProduk', '$nilaiPenilaian', '$deskripsiPenilaian')");
     }
 }

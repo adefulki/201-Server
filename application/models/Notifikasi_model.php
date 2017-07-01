@@ -11,61 +11,11 @@ class Notifikasi_model extends CI_Model
         parent::__construct();
     }
     
-    /*
-     * Get notifikasi by ID_NOTIFIKASI
-     */
-    function get_notifikasi($ID_NOTIFIKASI)
-    {
-        return $this->db->get_where('NOTIFIKASI',array('ID_NOTIFIKASI'=>$ID_NOTIFIKASI))->row_array();
+    function updateNotifikasi($idNotifikasi, $jarakNotifikasi, $statusNotifikasi){
+        $this->db->query("UPDATE `NOTIFIKASI` SET `jarakNotifikasi`='$jarakNotifikasi', `statusNotifikasi`='$statusNotifikasi' WHERE `idNotifikasi` = '$idNotifikasi'");
     }
-    
-    /*
-     * Get all notifikasi
-     */
-    function get_all_notifikasi()
-    {
-        return $this->db->get('NOTIFIKASI')->result_array();
-    }
-    
-    /*
-     * function to add new notifikasi
-     */
-    function add_notifikasi($params)
-    {
-        $this->db->insert('NOTIFIKASI',$params);
-        return $this->db->insert_id();
-    }
-    
-    /*
-     * function to update notifikasi
-     */
-    function update_notifikasi($ID_NOTIFIKASI,$params)
-    {
-        $this->db->where('ID_NOTIFIKASI',$ID_NOTIFIKASI);
-        $response = $this->db->update('NOTIFIKASI',$params);
-        if($response)
-        {
-            return "notifikasi updated successfully";
-        }
-        else
-        {
-            return "Error occuring while updating notifikasi";
-        }
-    }
-    
-    /*
-     * function to delete notifikasi
-     */
-    function delete_notifikasi($ID_NOTIFIKASI)
-    {
-        $response = $this->db->delete('NOTIFIKASI',array('ID_NOTIFIKASI'=>$ID_NOTIFIKASI));
-        if($response)
-        {
-            return "notifikasi deleted successfully";
-        }
-        else
-        {
-            return "Error occuring while deleting notifikasi";
-        }
+
+    function selectNotifikasiPembeli($idPembeli){
+        return $this->db->query("SELECT * FROM `NOTIFIKASI` WHERE `idPembeli`='$idPembeli'")->result_array();
     }
 }

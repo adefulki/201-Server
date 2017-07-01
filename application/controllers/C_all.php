@@ -8,6 +8,7 @@
  */
 class c_all extends CI_Controller
 {
+
     function __construct()
     {
         parent::__construct();
@@ -20,6 +21,7 @@ class c_all extends CI_Controller
         $this->load->model('Pengunjung_model','',True);
         $this->load->model('Penilaian_model','',True);
         $this->load->model('Produk_model','',True);
+        $this->load->model('Verifikasi_model','',True);
         $this->load->database();
     }
 

@@ -9,72 +9,44 @@ class Dagangan_model extends CI_Model
     function __construct()
     {
         parent::__construct();
-    }
-    
-    /*
-     * Get dagangan by ID_DAGANGAN
-     */
-    function get_dagangan_by_id_dagangan($ID_DAGANGAN)
-    {
-        return $this->db->get_where('DAGANGAN',array('ID_DAGANGAN'=>$ID_DAGANGAN))->result_array();
+
     }
 
-    /*
-     * Get dagangan by input
-     */
-    function get_dagangan_by_input($input)
-    {
-        return $this->db->query("SELECT * FROM DAGANGAN WHERE MATCH (NAMA_DAGANGAN) 
-        AGAINST ('$input' IN BOOLEAN MODE)")->result_array();
+    function selectAllDagangan(){
+        return $this->db->query("SELECT * FROM DAGANGAN WHERE 1")->result_array();
     }
-    
-    /*
-     * Get all dagangan
-     */
-    function get_all_dagangan()
-    {
-        return $this->db->get('DAGANGAN')->result_array();
+
+    function selectAllDaganganByKataKunci($kataKunci){
+        return $this->db->query("SELECT * FROM DAGANGAN WHERE DAGANGAN.namaDagangan 
+                                LIKE '%$kataKunci%' ORDER BY case when soundex(DAGANGAN.namaDagangan) = soundex('$kataKunci')
+                                then '1' else soundex(DAGANGAN.namaDagangan) end")->result_array();
     }
-    
-    /*
-     * function to add new dagangan
-     */
-    function add_dagangan($params)
-    {
-        $this->db->insert('DAGANGAN',$params);
-        return $this->db->insert_id();
+
+    function selectDagangan($idDagangan){
+        return $this->db->query("SELECT * FROM DAGANGAN WHERE DAGANGAN.idDagangan = '$idDagangan'")->row_array();
     }
-    
-    /*
-     * function to update dagangan
-     */
-    function update_dagangan($ID_DAGANGAN,$params)
-    {
-        $this->db->where('ID_DAGANGAN',$ID_DAGANGAN);
-        $response = $this->db->update('DAGANGAN',$params);
-        if($response)
-        {
-            return "dagangan updated successfully";
-        }
+
+    function updateStatusBerjualanDagangan($idDagangan){
+        $result = $this->db->query("SELECT `statusBerjualan` FROM `DAGANGAN` WHERE `idDagangan` = '$idDagangan'")->row_array();
+        $statusBerjualan = $result['statusBerjualan'];
+        $statusBerjualan = !$statusBerjualan;
+        $this->db->query("UPDATE `DAGANGAN` SET `statusBerjualan`='$statusBerjualan' WHERE `idDagangan` = '$idDagangan'");
+    }
+
+    function isValidDagangan($idDagangan){
+        if($this->db->query("SELECT * FROM DAGANGAN WHERE DAGANGAN.idDagangan = '$idDagangan'")->num_rows()>0)
+            return true;
         else
-        {
-            return "Error occuring while updating dagangan";
-        }
+            return false;
     }
-    
-    /*
-     * function to delete dagangan
-     */
-    function delete_dagangan($ID_DAGANGAN)
-    {
-        $response = $this->db->delete('DAGANGAN',array('ID_DAGANGAN'=>$ID_DAGANGAN));
-        if($response)
-        {
-            return "dagangan deleted successfully";
-        }
-        else
-        {
-            return "Error occuring while deleting dagangan";
-        }
+
+    function insertDagangan($idPedagang, $namaDagangan, $deskripsiDagangan, $fotoDagangan, $tipeDagangan){
+        $idDagangan = uniqid();
+        $this->db->query("INSERT INTO `PRODUK`  (`idDagangan`, `idPedagang`, `namaDagangan`, `deskripsiDagangan`, `tipeDagangan`, `fotoDagangan`, `statusBerjualan`) VALUES 
+                        ('$idDagangan', '$idPedagang', '$namaDagangan', '$deskripsiDagangan', '$tipeDagangan', '$fotoDagangan', False)");
+    }
+
+    function updateLokasiDagangan($idDagangan, $latDagangan, $lngDagangan){
+        $this->db->query("UPDATE `DAGANGAN` SET `latDagangan` = '$latDagangan', `lngDagangan` = '$lngDagangan' WHERE `idDagangan` = '$idDagangan'");
     }
 }

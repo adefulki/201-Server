@@ -10,67 +10,45 @@ class Pembeli_model extends CI_Model
     {
         parent::__construct();
     }
-    
-    /*
-     * Get pembeli by ID_PEMBELI
-     */
-    function get_pembeli($ID_PEMBELI)
-    {
-        return $this->db->get_where('PEMBELI',array('ID_PEMBELI'=>$ID_PEMBELI))->row_array();
-    }
-    
-    /*
-     * Get all pembeli
-     */
-    function get_all_pembeli()
-    {
-        return $this->db->get('PEMBELI')->result_array();
+
+    function updateNamaPembeli($idPembeli, $namaPembeli){
+        $this->db->query("UPDATE `PEMBELI` SET `namaPembeli`='$namaPembeli' WHERE `idPembeli` = '$idPembeli'");
     }
 
-    function get_count_nohp_pemebli($NOHP_PEMBELI)
-    {
-        return $this->db->get_where('PEMBELI',array('NOHP_PEMBELI'=>$NOHP_PEMBELI))->num_rows();
+    function updateEmailPembeli($idPembeli, $emailPembeli){
+        $this->db->query("UPDATE `PEMBELI` SET `emailPembeli`='$emailPembeli' WHERE `idPembeli` = '$idPembeli'");
     }
 
-    /*
-     * function to add new pembeli
-     */
-    function add_pembeli($params)
-    {
-        $this->db->insert('PEMBELI',$params);
-        return $this->db->insert_id();
+    function updatePasswordPembeli($idPembeli, $passwordPembeli){
+        $this->db->query("UPDATE `PEMBELI` SET `passwordPembeli`='$passwordPembeli' WHERE `idPembeli` = '$idPembeli'");
     }
-    
-    /*
-     * function to update pembeli
-     */
-    function update_pembeli($ID_PEMBELI,$params)
-    {
-        $this->db->where('ID_PEMBELI',$ID_PEMBELI);
-        $response = $this->db->update('PEMBELI',$params);
-        if($response)
-        {
-            return "pembeli updated successfully";
-        }
-        else
-        {
-            return "Error occuring while updating pembeli";
-        }
+
+    function updateAlamatPembeli($idPembeli, $alamatPembeli){
+        $this->db->query("UPDATE `PEMBELI` SET `alamatPembeli`='$alamatPembeli' WHERE `idPembeli` = '$idPembeli'");
     }
-    
-    /*
-     * function to delete pembeli
-     */
-    function delete_pembeli($ID_PEMBELI)
-    {
-        $response = $this->db->delete('PEMBELI',array('ID_PEMBELI'=>$ID_PEMBELI));
-        if($response)
-        {
-            return "pembeli deleted successfully";
-        }
-        else
-        {
-            return "Error occuring while deleting pembeli";
-        }
+
+    function updateNoPonselPembeli($idPembeli, $noPonselPembeli){
+        $this->db->query("UPDATE `PEMBELI` SET `noPonselPembeli`='$noPonselPembeli' WHERE `idPembeli` = '$idPembeli'");
+    }
+
+    function updateFotoPembeli($idPembeli, $fotoPembeli){
+        $this->db->query("UPDATE `PEMBELI` SET `fotoPembeli`='$fotoPembeli' WHERE `idPembeli` = '$idPembeli'");
+    }
+
+    function updateStatusVerifikasiPembeli($idPembeli){
+        $result = $this->db->query("SELECT `statusVerifikasiPembeli` FROM `PEMBELI` WHERE `idPembeli` = $idPembeli")->row_array();
+        $statusVerifikasiPembeli = $result['statusVerifikasiPembeli'];
+        $statusVerifikasiPembeli = !$statusVerifikasiPembeli;
+        $this->db->query("UPDATE `PEMBELI` SET `statusVerifikasiPembeli`='$statusVerifikasiPembeli' WHERE `idPembeli` = '$idPembeli'");
+    }
+
+    function insertPembeli($noPonselPembeli, $passwordPembeli){
+        $idPembeli = uniqid();
+        $this->db->query("INSERT INTO `PEMBELI`(`idPembeli`, `noPonselPembeli`, `passwordPembeli`, `statusVerifikasiPembeli`) VALUES 
+                        ('$idPembeli', '$noPonselPembeli', '$passwordPembeli', False)");
+    }
+
+    function updateDetailPembeli($idPembeli, $namaPembeli, $alamatPembeli, $fotoPembeli){
+        $this->db->query("UPDATE `PEMBELI` SET `namaPembeli`='$namaPembeli', `alamatPembeli`='$alamatPembeli', `fotoPembeli`='$fotoPembeli' WHERE `idPembeli` = '$idPembeli'");
     }
 }

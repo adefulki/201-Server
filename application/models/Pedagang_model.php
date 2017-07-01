@@ -10,76 +10,52 @@ class Pedagang_model extends CI_Model
     {
         parent::__construct();
     }
-    
-    /*
-     * Get pedagang by ID_PEDAGANG
-     */
-    function get_pedagang($ID_DAGANGAN)
-    {
-        return $this->db->get_where('PEDAGANG',array('ID_DAGANGAN'=>$ID_DAGANGAN))->row_array();
+
+    function selectAllPedagangByKataKunci($kataKunci){
+        return $this->db->query("SELECT * FROM PEDAGANG, DAGANGAN WHERE DAGANGAN.idPedagang = PEDAGANG.idPedagang 
+                                AND PEDAGANG.namaPedagang LIKE '%$kataKunci%' ORDER BY case when 
+                                soundex(PEDAGANG.namaPedagang) = soundex('$kataKunci') then '1' else 
+                                soundex(PEDAGANG.namaPedagang) end")->result_array();
     }
 
-    /*
-     * Get pedagang by input
-     */
-    function get_pedagang_by_input($input)
-    {
-        return $this->db->query("SELECT * FROM PEDAGANG WHERE MATCH (NAMA_PEDAGANG)
-        AGAINST ('$input' IN BOOLEAN MODE)")->result_array();
+    function selectPedagang($idPedagang){
+        return $this->db->query("SELECT * FROM PEDAGANG WHERE PEDAGANG.idPedagang = '$idPedagang'")->row_array();
     }
 
-    function get_count_nohp_pedagang($NOHP_PEDAGANG)
-    {
-        return $this->db->get_where('PEDAGANG',array('NOHP_PEDAGANG'=>$NOHP_PEDAGANG))->num_rows();
+    function updateNamaPedagang($idPedagang, $namaPedagang){
+        $this->db->query("UPDATE `PEDAGANG` SET `namaPedagang`='$namaPedagang' WHERE `idPedagang` = '$idPedagang'");
     }
-    
-    /*
-     * Get all pedagang
-     */
-    function get_all_pedagang()
-    {
-        return $this->db->get('PEDAGANG')->result_array();
+
+    function updateEmailPedagang($idPedagang, $emailPedagang){
+        $this->db->query("UPDATE `PEDAGANG` SET `emailPedagang`='$emailPedagang' WHERE `idPedagang` = '$idPedagang'");
     }
-    
-    /*
-     * function to add new pedagang
-     */
-    function add_pedagang($params)
-    {
-        $this->db->insert('PEDAGANG',$params);
-        return $this->db->insert_id();
+
+    function updatePasswordPedagang($idPedagang, $passwordPedagang){
+        $this->db->query("UPDATE `PEDAGANG` SET `passwordPedagang`='$passwordPedagang' WHERE `idPedagang` = '$idPedagang'");
     }
-    
-    /*
-     * function to update pedagang
-     */
-    function update_pedagang($ID_PEDAGANG,$params)
-    {
-        $this->db->where('ID_PEDAGANG',$ID_PEDAGANG);
-        $response = $this->db->update('PEDAGANG',$params);
-        if($response)
-        {
-            return "pedagang updated successfully";
-        }
-        else
-        {
-            return "Error occuring while updating pedagang";
-        }
+
+    function updateAlamatPedagang($idPedagang, $alamatPedagang){
+        $this->db->query("UPDATE `PEDAGANG` SET `alamatPedagang`='$alamatPedagang' WHERE `idPedagang` = '$idPedagang'");
     }
-    
-    /*
-     * function to delete pedagang
-     */
-    function delete_pedagang($ID_PEDAGANG)
-    {
-        $response = $this->db->delete('PEDAGANG',array('ID_PEDAGANG'=>$ID_PEDAGANG));
-        if($response)
-        {
-            return "pedagang deleted successfully";
-        }
-        else
-        {
-            return "Error occuring while deleting pedagang";
-        }
+
+    function updateNoPonselPedagang($idPedagang, $noPonselPedagang){
+        $this->db->query("UPDATE `PEDAGANG` SET `noPonselPedagang`='$noPonselPedagang' WHERE `idPedagang` = '$idPedagang'");
+    }
+
+    function updateFotoPedagang($idPedagang, $fotoPedagang){
+        $this->db->query("UPDATE `PEDAGANG` SET `fotoPedagang`='$fotoPedagang' WHERE `idPedagang` = '$idPedagang'");
+    }
+
+    function updateStatusVerifikasiPedagang($idPedagang){
+        $result = $this->db->query("SELECT `statusVerifikasiPedagang` FROM `PEDAGANG` WHERE `idPedagang` = $idPedagang")->row_array();
+        $statusVerifikasiPedagang = $result['statusVerifikasiPedagang'];
+        $statusVerifikasiPedagang = !$statusVerifikasiPedagang;
+        $this->db->query("UPDATE `PEDAGANG` SET `statusVerifikasiPedagang`='$statusVerifikasiPedagang' WHERE `idPedagang` = '$idPedagang'");
+    }
+
+    function insertPedagang($noPonselPedagang, $passwordPedagang){
+        $idPedagang = uniqid();
+        $this->db->query("INSERT INTO `PEDAGANG`(`idPedagang`, `noPonselPedagang`, `passwordPedagang`, `statusVerifikasiPedagang`) VALUES
+                        ('$idPedagang','$noPonselPedagang','$passwordPedagang',False)");
     }
 }

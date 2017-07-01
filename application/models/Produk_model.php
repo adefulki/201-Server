@@ -10,79 +10,25 @@ class Produk_model extends CI_Model
     {
         parent::__construct();
     }
-    
-    /*
-     * Get produk by ID_PRODUK
-     */
-    function get_produk_by_id_produk($ID_PRODUK)
-    {
-        return $this->db->get_where('PRODUK',array('ID_PRODUK'=>$ID_PRODUK))->result_array();
+
+    function selectAllProdukByKataKunci($kataKunci){
+        return $this->db->query("SELECT * FROM PRODUK, DAGANGAN WHERE DAGANGAN.idDagangan = PRODUK.idDagangan 
+                                AND PRODUK.namaProduk LIKE '%$kataKunci%' ORDER BY case when 
+                                soundex(PRODUK.namaProduk) = soundex('$kataKunci') then '1' else 
+                                soundex(PRODUK.namaProduk) end")->result_array();
     }
 
-    /*
-     * Get produk by ID_PRODUK
-     */
-    function get_produk_by_id_dagangan($ID_DAGANGAN)
-    {
-        return $this->db->get_where('PRODUK',array('ID_DAGANGAN'=>$ID_DAGANGAN))->result_array();
+    function selectProdukDagangan($idDagangan){
+        return $this->db->query("SELECT * FROM PRODUK WHERE PRODUK.idDagangan = '$idDagangan'")->result_array();
     }
 
-    /*
-     * Get produk by input
-     */
-    function get_produk_by_input($input)
-    {
-        return $this->db->query("SELECT * FROM PRODUK WHERE MATCH (NAMA_PRODUK)
-        AGAINST ('$input' IN BOOLEAN MODE)")->result_array();
+    function updateProduk($idProduk, $namaProduk, $deskripsiProduk, $hargaProduk, $satuanProduk, $fotoProduk){
+        $this->db->query("UPDATE `PRODUK` SET `namaProduk`='$namaProduk', `deskripsiProduk`='$deskripsiProduk', `hargaProduk`='$hargaProduk', `satuanProduk`='$satuanProduk',`fotoProduk`='$fotoProduk' WHERE `idProduk` = '$idProduk'");
     }
 
-    /*
-     * Get all produk
-     */
-    function get_all_produk()
-    {
-        return $this->db->get('PRODUK')->result_array();
-    }
-    
-    /*
-     * function to add new produk
-     */
-    function add_produk($params)
-    {
-        $this->db->insert('PRODUK',$params);
-        return $this->db->insert_id();
-    }
-    
-    /*
-     * function to update produk
-     */
-    function update_produk($ID_PRODUK,$params)
-    {
-        $this->db->where('ID_PRODUK',$ID_PRODUK);
-        $response = $this->db->update('PRODUK',$params);
-        if($response)
-        {
-            return "produk updated successfully";
-        }
-        else
-        {
-            return "Error occuring while updating produk";
-        }
-    }
-    
-    /*
-     * function to delete produk
-     */
-    function delete_produk($ID_PRODUK)
-    {
-        $response = $this->db->delete('PRODUK',array('ID_PRODUK'=>$ID_PRODUK));
-        if($response)
-        {
-            return "produk deleted successfully";
-        }
-        else
-        {
-            return "Error occuring while deleting produk";
-        }
+    function insertProduk($idDagangan, $namaProduk, $deskripsiProduk, $fotoProduk, $hargaProduk, $satuanProduk){
+        $idProduk = uniqid();
+        $this->db->query("INSERT INTO `PRODUK  (`idProduk`, `idDagangan`, `namaProduk`, `deskripsiProduk`, `fotoProduk`, `hargaProduk`, `satuanProduk`) VALUES 
+                        ('$idProduk', '$idDagangan', '$namaProduk', '$deskripsiProduk', '$fotoProduk', '$hargaProduk', '$satuanProduk')");
     }
 }

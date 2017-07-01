@@ -11,78 +11,16 @@ class Pelanggan_model extends CI_Model
         parent::__construct();
     }
     
-    /*
-     * Get pelanggan by ID_PELANGGAN
-     */
-    function get_pelanggan($ID_PELANGGAN)
-    {
-        return $this->db->get_where('PELANGGAN',array('ID_PELANGGAN'=>$ID_PELANGGAN))->row_array();
+    function countPelanggan($idDagangan){
+        return $this->db->query("SELECT * FROM PELANGGAN WHERE PELANGGAN.idDagangan = '$idDagangan'")->num_rows();
     }
 
-    function get_count_pelanggan($ID_DAGANGAN){
-        return $this->db->get_where('PELANGGAN',array('ID_DAGANGAN'=>$ID_DAGANGAN))->num_rows();
-    }
-
-
-    /*
-     * Get pelanggan by ID_PEMBELI
-     */
-    function get_pelanggan_by_pembeli($ID_PEMBELI)
-    {
-        return $this->db->get_where('PELANGGAN',array('ID_PEMBELI'=>$ID_PEMBELI))->result_array();
-    }
-
-    
-    /*
-     * Get all pelanggan
-     */
-    function get_all_pelanggan()
-    {
-        return $this->db->get('PELANGGAN')->result_array();
-    }
-
-    function get_count_pelanggan_by_id_pembeli_id_dagangan($ID_PEMBELI, $ID_DAGANGAN){
-        return $this->db->get_where('PELANGGAN',array('ID_DAGANGAN'=>$ID_DAGANGAN, 'ID_PEMBELI'=>$ID_PEMBELI))->num_rows();
-    }
-    /*
-     * function to add new pelanggan
-     */
-    function add_pelanggan($params)
-    {
-        $this->db->insert('PELANGGAN',$params);
-        return $this->db->insert_id();
-    }
-    
-    /*
-     * function to update pelanggan
-     */
-    function update_pelanggan($ID_PELANGGAN,$params)
-    {
-        $this->db->where('ID_PELANGGAN',$ID_PELANGGAN);
-        $response = $this->db->update('PELANGGAN',$params);
-        if($response)
-        {
-            return "pelanggan updated successfully";
-        }
+    function isBerlangganan($idDagangan, $idPembeli){
+        if($this->db->query("SELECT * FROM PELANGGAN WHERE PELANGGAN.idDagangan = '$idDagangan' AND 
+                            PELANGGAN.idPembeli = '$idPembeli'")->num_rows()>0)
+            return true;
         else
-        {
-            return "Error occuring while updating pelanggan";
-        }
-    }
-    
-    /*
-     * function to delete pelanggan
-     */
-    function delete_pelanggan($ID_PELANGGAN)
-    {
-        $response = $this->db->delete('PELANGGAN',array('ID_PELANGGAN'=>$ID_PELANGGAN));
-        if($response)
-        {
-            return "pelanggan deleted successfully";
-        }
-        else
-        {
-            return "Error occuring while deleting pelanggan";
-        }
+            return false;
+
     }
 }

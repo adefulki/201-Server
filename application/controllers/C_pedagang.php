@@ -22,7 +22,7 @@ class C_pedagang extends CI_Controller
         $this->load->model('Produk_model', '', True);
         $this->load->database();
     }
-    
+
 
     /*
   * start of akun pedagang
