@@ -23,19 +23,10 @@ class Pembeli_controller extends CI_Controller
         $this->verifikasiController = new Verifikasi_controller();
     }
 
-    // edit no 1. Nama pembeli
-
     function editNamaPembeli()
     {
-        $arr = (Object) array();
-        /*
-         * mendecode json kedalam variabel obj
-         */
         $obj= json_decode(file_get_contents('php://input'),true);
 
-        /*
-         * memisahkan atribut
-         */
         $idPembeli=$obj['idPembeli'];
         $namaPembeli=$obj['namaPembeli'];
 
@@ -44,15 +35,8 @@ class Pembeli_controller extends CI_Controller
 
     function editEmailPembeli()
     {
-        $arr = (Object) array();
-        /*
-         * mendecode json kedalam variabel obj
-         */
         $obj= json_decode(file_get_contents('php://input'),true);
 
-        /*
-         * memisahkan atribut
-         */
         $idPembeli=$obj['idPembeli'];
         $emailPembeli=$obj['emailPembeli'];
 
@@ -61,15 +45,8 @@ class Pembeli_controller extends CI_Controller
 
     function editPasswordPembeli()
     {
-        $arr = (Object) array();
-        /*
-         * mendecode json kedalam variabel obj
-         */
         $obj= json_decode(file_get_contents('php://input'),true);
 
-        /*
-         * memisahkan atribut
-         */
         $idPembeli=$obj['idPembeli'];
         $passwordPembeli=$obj['passwordPembeli'];
 
@@ -78,15 +55,8 @@ class Pembeli_controller extends CI_Controller
 
     function editAlamatPembeli()
     {
-        $arr = (Object) array();
-        /*
-         * mendecode json kedalam variabel obj
-         */
         $obj= json_decode(file_get_contents('php://input'),true);
 
-        /*
-         * memisahkan atribut
-         */
         $idPembeli=$obj['idPembeli'];
         $alamatPembeli=$obj['alamatPembeli'];
 
@@ -95,7 +65,6 @@ class Pembeli_controller extends CI_Controller
 
     function editNoPonselPembeli()
     {
-        $arr = (Object) array();
         $obj= json_decode(file_get_contents('php://input'),true);
         $idPembeli=$obj['idPembeli'];
         $noPonselPembeli=$obj['noPonselPembeli'];
@@ -112,7 +81,6 @@ class Pembeli_controller extends CI_Controller
 
     function editFotoPembeli()
     {
-        $arr = (Object) array();
         $obj= json_decode(file_get_contents('php://input'),true);
 
         $idPembeli=$obj['idPembeli'];

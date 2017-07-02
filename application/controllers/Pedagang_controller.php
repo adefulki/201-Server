@@ -24,15 +24,8 @@ class Pedagang_controller extends CI_Controller
 
     function editNamaPedagang()
     {
-        $arr = (Object) array();
-        /*
-         * mendecode json kedalam variabel obj
-         */
         $obj= json_decode(file_get_contents('php://input'),true);
 
-        /*
-         * memisahkan atribut
-         */
         $idPedagang=$obj['idPedagang'];
         $namaPedagang=$obj['namaPedagang'];
 
@@ -41,15 +34,8 @@ class Pedagang_controller extends CI_Controller
 
     function editEmailPedagang()
     {
-        $arr = (Object) array();
-        /*
-         * mendecode json kedalam variabel obj
-         */
         $obj= json_decode(file_get_contents('php://input'),true);
 
-        /*
-         * memisahkan atribut
-         */
         $idPedagang=$obj['idPedagang'];
         $emailPedagang=$obj['emailPedagang'];
 
@@ -58,15 +44,8 @@ class Pedagang_controller extends CI_Controller
 
     function editPasswordPedagang()
     {
-        $arr = (Object) array();
-        /*
-         * mendecode json kedalam variabel obj
-         */
         $obj= json_decode(file_get_contents('php://input'),true);
 
-        /*
-         * memisahkan atribut
-         */
         $idPedagang=$obj['idPedagang'];
         $passwordPedagang=$obj['passwordPedagang'];
 
@@ -75,15 +54,8 @@ class Pedagang_controller extends CI_Controller
 
     function editAlamatPedagang()
     {
-        $arr = (Object) array();
-        /*
-         * mendecode json kedalam variabel obj
-         */
         $obj= json_decode(file_get_contents('php://input'),true);
 
-        /*
-         * memisahkan atribut
-         */
         $idPedagang=$obj['idPedagang'];
         $alamatPedagang=$obj['alamatPedagang'];
 
@@ -92,7 +64,6 @@ class Pedagang_controller extends CI_Controller
 
     function editNoPonselPedagang()
     {
-        $arr = (Object) array();
         $obj= json_decode(file_get_contents('php://input'),true);
 
         $idPedagang=$obj['idPedagang'];
@@ -110,15 +81,8 @@ class Pedagang_controller extends CI_Controller
 
     function editFotoPedagang()
     {
-        $arr = (Object) array();
-        /*
-         * mendecode json kedalam variabel obj
-         */
         $obj= json_decode(file_get_contents('php://input'),true);
 
-        /*
-         * memisahkan atribut
-         */
         $idPedagang=$obj['idPedagang'];
         $fotoPedagang=$obj['fotoPedagang'];
 
