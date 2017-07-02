@@ -135,7 +135,7 @@ class Pedagang_controller extends CI_Controller
 
         $this->pedagangModel->insertPedagang($noPonselPedagang, $passwordPedagang);
         $pedagang = $this->pedagangModel->selectIdPedagangByNoPonselPedagang($noPonselPedagang);
-        $this->verifikasiModel->insertVerifikasiPedagang($pedagang['noPonselPedagang']);
+        $this->verifikasiModel->insertVerifikasiPedagang($pedagang['noPonselPedagang'],$kodeAkses,$waktuKadaluarsa);
 
         $this->verifikasiController->sendVerifikasiAccount
     }

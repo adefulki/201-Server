@@ -131,7 +131,7 @@ class Pembeli_controller extends CI_Controller
 
         $this->pembeliModel->insertPembeli($noPonselPembeli, $passwordPembeli);
         $pembeli = $this->pembeliModel->selectIdPembeliByNoPonselPembeli($noPonselPembeli);
-        $this->verifikasiModel->insertVerifikasiPembeli($pembeli['noPonselPembeli']);
+        $this->verifikasiModel->insertVerifikasiPembeli($pembeli['noPonselPembeli'],$kodeAkses,$waktuKadaluarsa);
 
         $this->verifikasiController->sendVerifikasiAccount
     }
