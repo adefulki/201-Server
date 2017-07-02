@@ -64,4 +64,8 @@ class Pedagang_model extends CI_Model
             return true;
         else return false;
     }
+
+    function selectIdPedagangByNoPonselPedagang($noPonselPedagang){
+        return $this->db->query("SELECT PEDAGANG.idPedagang FROM PEDAGANG WHERE PEDAGANG.noPonselPedagang = '$noPonselPedagang'")->row_array();
+    }
 }

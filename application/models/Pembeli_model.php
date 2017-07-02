@@ -57,4 +57,8 @@ class Pembeli_model extends CI_Model
             return true;
         else return false;
     }
+
+    function selectIdPembeliByNoPonselPembeli($noPonselPembeli){
+        return $this->db->query("SELECT PEMBELI.idPembeli FROM PEMBELI WHERE PEMBELI.noPonselPembeli = '$noPonselPembeli'")->row_array();
+    }
 }

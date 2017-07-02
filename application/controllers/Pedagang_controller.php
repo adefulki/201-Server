@@ -130,7 +130,14 @@ class Pedagang_controller extends CI_Controller
         $noPonselPedagang=$obj['noPonselPedagang'];
         $passwordPedagang=$obj['passwordPedagang'];
 
+        $kodeAkses = $this->verifikasiController->createKodeAkses();
+        $waktuKadaluarsa = $this->verifikasiController->createWaktuKadaluarsa();
+
         $this->pedagangModel->insertPedagang($noPonselPedagang, $passwordPedagang);
+        $pedagang = $this->pedagangModel->selectIdPedagangByNoPonselPedagang($noPonselPedagang);
+        $this->verifikasiModel->insertVerifikasiPedagang($pedagang['noPonselPedagang']);
+
+        $this->verifikasiController->sendVerifikasiAccount
     }
 
     function checkPasswordPedagang(){
