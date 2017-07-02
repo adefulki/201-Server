@@ -38,4 +38,21 @@ class Produk_controller extends CI_Controller
 
 
     }
+
+    function getProduk(){
+        $obj= json_decode(file_get_contents('php://input'),true);
+        $idDagangan=$obj['idDagangan'];
+        $arr = array();
+        $i=0;
+        foreach ($this->produkModel->selectProdukDagangan($idDagangan) as $item){
+            $arr[i]=array('idProduk'=>$item['idProduk'],
+                            'namaProduk'=>$item['namaProduk'],
+                            'deskripsiProduk'=>$item['deskripsiProduk'],
+                            'fotoProduk'=>$item['fotoProduk']);
+            $i++;
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($arr);
+    }
 }
