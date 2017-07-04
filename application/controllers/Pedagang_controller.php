@@ -76,7 +76,7 @@ class Pedagang_controller extends CI_Controller
         $this->pedagangModel->updateStatusVerifikasiPedagang($idPedagang);
         $this->verifikasiModel->insertVerifikasiPedagang($idPedagang,$kodeAkses,$waktuKadaluarsa);
 
-        $this->verifikasiController->sendVerifyAccount()
+        $this->verifikasiController->sendVerifikasi($noPonselPedagang,$kodeAkses,$waktuKadaluarsa);
     }
 
     function editFotoPedagang()
@@ -101,7 +101,7 @@ class Pedagang_controller extends CI_Controller
         $pedagang = $this->pedagangModel->selectIdPedagangByNoPonselPedagang($noPonselPedagang);
         $this->verifikasiModel->insertVerifikasiPedagang($pedagang['idPedagang'],$kodeAkses,$waktuKadaluarsa);
 
-        $this->verifikasiController->sendVerifikasi
+        $this->verifikasiController->sendVerifikasi($noPonselPedagang,$kodeAkses,$waktuKadaluarsa);
     }
 
     function checkPasswordPedagang(){

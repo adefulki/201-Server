@@ -36,4 +36,8 @@ class Verifikasi_model extends CI_Model
     function deleteVerifikasi($idPembeli, $idPedagang){
         $this->db->query("DELETE FROM `VERIFIKASI` WHERE `idPedagang` = '$idPedagang' OR `idPembeli` = '$idPembeli'");
     }
+
+    function selectAllVerifikasi(){
+        return $this->db->query("SELECT * FROM `VERIFIKASI`")->result_array();
+    }
 }

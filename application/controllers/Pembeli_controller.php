@@ -76,7 +76,7 @@ class Pembeli_controller extends CI_Controller
         $this->pembeliModel->updateStatusVerifikasiPembeli($idPembeli);
         $this->verifikasiModel->insertVerifikasiPembeli($idPembeli,$kodeAkses,$waktuKadaluarsa);
 
-        $this->verifikasiController->sendVerifyAccount()
+        $this->verifikasiController->sendVerifikasi($noPonselPembeli,$kodeAkses,$waktuKadaluarsa);
     }
 
     function editFotoPembeli()
@@ -101,7 +101,7 @@ class Pembeli_controller extends CI_Controller
         $pembeli = $this->pembeliModel->selectIdPembeliByNoPonselPembeli($noPonselPembeli);
         $this->verifikasiModel->insertVerifikasiPembeli($pembeli['idPembeli'],$kodeAkses,$waktuKadaluarsa);
 
-        $this->verifikasiController->sendVerifikasiAccount
+        $this->verifikasiController->sendVerifikasi($noPonselPembeli,$kodeAkses,$waktuKadaluarsa);
     }
 
     function editDetailPembeli(){

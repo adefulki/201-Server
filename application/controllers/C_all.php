@@ -431,27 +431,25 @@ class c_all extends CI_Controller
     //mengirim pesan verifikasi akun
     //inputan berupa no ponsel
     //terakhir update: 18/05/2017(Ade)
-    function send_verify_account($no_ponsel, $kode_akses){
-        // Textlocal account details
-        $username = 'ade.fulki@gmail.com';
-        $hash = '0aa35bc3e41889c2a762d3e6f9d2e648c99e909ca59522791a4f12a7e6baff47';
+    function sendVerifikasi($noPonsel, $kodeAkses, $waktuKadaluarsa){
+        $userkey = "adefulki"; //userkey lihat di zenziva
+        $passkey = "Kam1selalu1"; // set passkey di zenziva
+        $message = "Kode Akses anda adalah ".$kodeAkses." . Berlaku hingga ".$waktuKadaluarsa;
+        $url = "https://reguler.zenziva.net/apps/smsapi.php";
+        $curlHandle = curl_init();
+        curl_setopt($curlHandle, CURLOPT_URL, $url);
+        url_setopt($curlHandle, CURLOPT_POSTFIELDS, 'userkey='.$userkey.'&passkey='.$passkey.'&nohp='.$noPonsel.'&pesan='.urlencode($message));
+        curl_setopt($curlHandle, CURLOPT_HEADER, 0);
+        curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($curlHandle, CURLOPT_TIMEOUT,30);
+        curl_setopt($curlHandle, CURLOPT_POST, 1);
+        $results = curl_exec($curlHandle);
+        curl_close($curlHandle);
 
-        // Message details
-        $numbers = array($no_ponsel);
-        $sender = urlencode('PKL Tracer');
-        $message = rawurlencode('Kode akses Anda : '.$kode_akses);
-
-        $numbers = implode(',', $numbers);
-
-        // Prepare data for POST request
-        $data = array('username' => $username, 'hash' => $hash, 'numbers' => $numbers, "sender" => $sender, "message" => $message);
-
-        // Send the POST request with cURL
-        $ch = curl_init('http://api.txtlocal.com/send/');
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $response = curl_exec($ch);
-        curl_close($ch);
+        $XMLdata = new SimpleXMLElement($results);
+        $status = $XMLdata->message[0]->text;
+        echo $status;
     }
 }
