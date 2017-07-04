@@ -17,6 +17,7 @@ class Notifikasi_controller extends CI_Controller
         $this->notifikasiModel = new Notifikasi_model();
         $this->load->model('Obrolan_model','',True);
         $this->obrolanModel = new Obrolan_model();
+        $this->load->database();
     }
 
     function changeStatusNotifikasi(){
@@ -59,6 +60,7 @@ class Notifikasi_controller extends CI_Controller
         $idPembeli=$obj['idPembeli'];
         $latPembeli=$obj['latPembeli'];
         $lngPembeli=$obj['lngPembeli'];
+        $userId=$obj['userId'];
 
         foreach ($this->notifikasiModel->selectNotifikasiPembeli($idPembeli) as $item){
             $jarakHaversine = $this->checkHaversineFormula($latPembeli,$lngPembeli,$item['latDagangan'],$item['lngDagangan']);
@@ -66,9 +68,42 @@ class Notifikasi_controller extends CI_Controller
             if ($statusInRange == true){
                 $text=$this->createText()
                 $this->obrolanModel->insertObrolan($item['latDagangan'],$idPembeli,$text,$idPembeli);
-                $this->sendNotifikasi()
+                $this->sendNotifikasi($userId, $text);
             }
         }
+    }
+
+    function sendNotifikasi($userId, $text){
+
+            $content = array(
+                "en" => $text
+            );
+
+            $fields = array(
+                'app_id' => "8b0d0429-41a3-40fe-836d-86658cce9744",
+                'include_player_ids' => array($userId),
+                'data' => array("foo" => "bar"),
+                'contents' => $content
+            );
+
+            $fields = json_encode($fields);
+            print("\nJSON sent:\n");
+            print($fields);
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8',
+                'Authorization: Basic ZTdhZmUwYWMtZWU0MC00YWI3LTk4ODMtYWJjN2M1NTE4YjYz'));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($ch, CURLOPT_HEADER, FALSE);
+            curl_setopt($ch, CURLOPT_POST, TRUE);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+
+            $response = curl_exec($ch);
+            curl_close($ch);
+
+            return $response;
     }
 
 

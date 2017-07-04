@@ -30,7 +30,6 @@ class Dagangan_controller extends CI_Controller
         $this->load->model('Pelanggan_model','',True);
         $this->pelangganModel = new Pelanggan_model();
         $this->penilaianController = new Penilaian_controller();
-        $this->load->database();
     }
 
     //mengirim informasi seluruh dagangan untuk ditampilkan pada map

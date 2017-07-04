@@ -67,14 +67,19 @@ class Verifikasi_controller extends CI_Controller
         echo json_encode($arr);
     }
 
-    function sendVerifikasi($noPonsel, $kodeAkses, $waktuKadaluarsa){
-        $userkey = "adefulki"; //userkey lihat di zenziva
-        $passkey = "Kam1selalu1"; // set passkey di zenziva
+    function sendVerifikasi(){
+        $obj=json_decode(file_get_contents('php://input'), true);
+        $noPonsel= $obj['noPonsel'];
+        $kodeAkses= $obj['kodeAkses'];
+        $waktuKadaluarsa= $obj['waktuKadaluarsa'];
+
+        $userkey = "iln59o"; //userkey lihat di zenziva
+        $passkey = "123456"; // set passkey di zenziva
         $message = "Kode Akses anda adalah ".$kodeAkses." . Berlaku hingga ".$waktuKadaluarsa;
         $url = "https://reguler.zenziva.net/apps/smsapi.php";
         $curlHandle = curl_init();
         curl_setopt($curlHandle, CURLOPT_URL, $url);
-        url_setopt($curlHandle, CURLOPT_POSTFIELDS, 'userkey='.$userkey.'&passkey='.$passkey.'&nohp='.$noPonsel.'&pesan='.urlencode($message));
+        curl_setopt($curlHandle, CURLOPT_POSTFIELDS, 'userkey='.$userkey.'&passkey='.$passkey.'&nohp='.$noPonsel.'&pesan='.urlencode($message));
         curl_setopt($curlHandle, CURLOPT_HEADER, 0);
         curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
