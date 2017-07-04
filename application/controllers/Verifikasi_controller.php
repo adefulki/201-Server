@@ -67,11 +67,7 @@ class Verifikasi_controller extends CI_Controller
         echo json_encode($arr);
     }
 
-    function sendVerifikasi(){
-        $obj=json_decode(file_get_contents('php://input'), true);
-        $noPonsel= $obj['noPonsel'];
-        $kodeAkses= $obj['kodeAkses'];
-        $waktuKadaluarsa= $obj['waktuKadaluarsa'];
+    function sendVerifikasi($noPonsel, $kodeAkses, $waktuKadaluarsa){
 
         $userkey = "iln59o"; //userkey lihat di zenziva
         $passkey = "123456"; // set passkey di zenziva

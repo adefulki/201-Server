@@ -66,24 +66,28 @@ class Notifikasi_controller extends CI_Controller
             $jarakHaversine = $this->checkHaversineFormula($latPembeli,$lngPembeli,$item['latDagangan'],$item['lngDagangan']);
             $statusInRange = $this->checkDistance($jarakHaversine, $item['jarakNotifikasi']);
             if ($statusInRange == true){
-                $text=$this->createText()
+                $text='belummmm';
                 $this->obrolanModel->insertObrolan($item['latDagangan'],$idPembeli,$text,$idPembeli);
                 $this->sendNotifikasi($userId, $text);
             }
         }
     }
 
-    function sendNotifikasi($userId, $text){
-
+    function sendNotifikasi($userId,$header,$text){
             $content = array(
                 "en" => $text
+            );
+
+            $headings = array(
+                "en" => $header
             );
 
             $fields = array(
                 'app_id' => "8b0d0429-41a3-40fe-836d-86658cce9744",
                 'include_player_ids' => array($userId),
                 'data' => array("foo" => "bar"),
-                'contents' => $content
+                'contents' => $content,
+                'headings' => $headings
             );
 
             $fields = json_encode($fields);
