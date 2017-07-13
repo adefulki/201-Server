@@ -13,7 +13,7 @@ class Dagangan_model extends CI_Model
     }
 
     function selectAllDagangan(){
-        return $this->db->query("SELECT * FROM DAGANGAN WHERE 1")->result_array();
+        return $this->db->query("SELECT * FROM DAGANGAN, PEDAGANG WHERE PEDAGANG.idPedagang = DAGANGAN.idPedagang AND PEDAGANG.statusVerifikasiPedagang = TRUE")->result_array();
     }
 
     function selectAllDaganganByKataKunci($kataKunci){

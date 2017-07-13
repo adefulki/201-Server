@@ -61,4 +61,11 @@ class Pembeli_model extends CI_Model
     function selectIdPembeliByNoPonselPembeli($noPonselPembeli){
         return $this->db->query("SELECT PEMBELI.idPembeli FROM PEMBELI WHERE PEMBELI.noPonselPembeli = '$noPonselPembeli'")->row_array();
     }
+
+    function isValidAccount($noPonselPembeli,$passwordPembeli){
+        if($this->db->query("SELECT * FROM `PEMBELI` WHERE  
+                            (PEMBELI.noPonselPembeli = '$noPonselPembeli' AND PEMBELI.passwordPembeli = '$passwordPembeli')")->num_rows() > 0)
+            return true;
+        else return false;
+    }
 }

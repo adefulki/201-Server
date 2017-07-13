@@ -56,7 +56,7 @@ class Pedagang_model extends CI_Model
     function insertPedagang($noPonselPedagang, $passwordPedagang){
         $idPedagang = uniqid();
         $this->db->query("INSERT INTO `PEDAGANG`(`idPedagang`, `noPonselPedagang`, `passwordPedagang`, `statusVerifikasiPedagang`) VALUES
-                        ('$idPedagang','$noPonselPedagang','$passwordPedagang',False)");
+                        ('$idPedagang','$noPonselPedagang','$passwordPedagang','False')");
     }
 
     function isValidPasswordPedagang($idPedagang, $passwordPedagang){
@@ -67,5 +67,12 @@ class Pedagang_model extends CI_Model
 
     function selectIdPedagangByNoPonselPedagang($noPonselPedagang){
         return $this->db->query("SELECT PEDAGANG.idPedagang FROM PEDAGANG WHERE PEDAGANG.noPonselPedagang = '$noPonselPedagang'")->row_array();
+    }
+
+    function isValidAccount($noPonselPedagang,$passwordPedagang){
+        if($this->db->query("SELECT * FROM `PEDAGANG` WHERE 
+                            (PEDAGANG.noPonselPedagang = '$noPonselPedagang' AND PEDAGANG.passwordPedagang = '$passwordPedagang')")->num_rows() > 0)
+            return true;
+        else return false;
     }
 }

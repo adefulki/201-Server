@@ -25,7 +25,7 @@ class Verifikasi_model extends CI_Model
 
     function insertVerifikasiPedagang($idPedagang, $kodeAkses, $waktuKadaluarsa){
         $idVerifikasi = uniqid();
-        $this->db->query("INSERT INTO `VERIFIKASI`(`idVrifikasi`, `idPedagang`, `kodeAkses`, `waktuKadaluarsa`) VALUES ('$idVerifikasi', '$idPedagang', '$kodeAkses', '$waktuKadaluarsa')");
+        $this->db->query("INSERT INTO `VERIFIKASI`(`idVerifikasi`, `idPedagang`, `kodeAkses`, `waktuKadaluarsa`) VALUES ('$idVerifikasi', '$idPedagang', '$kodeAkses', '$waktuKadaluarsa')");
     }
 
     function insertVerifikasiPembeli($idPembeli, $kodeAkses, $waktuKadaluarsa){

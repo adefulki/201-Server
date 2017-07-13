@@ -62,7 +62,7 @@ class Penilaian_controller extends CI_Controller
         }
         $sum = ($star5*5)+($star4*4)+($star3*3)+($star2*2)+($star1);
 
-        if($responden!=0 && $responden>=30){
+        if($responden!=0){
             $percent = $sum/($responden*5)*100;
             if($percent>=80)
                 return true;

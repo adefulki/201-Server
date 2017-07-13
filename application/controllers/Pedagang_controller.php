@@ -6,6 +6,7 @@
  * Date: 6/14/2017
  * Time: 10:07 PM
  */
+include 'Verifikasi_controller.php';
 class Pedagang_controller extends CI_Controller
 {
     private $pedagangModel;
@@ -91,8 +92,8 @@ class Pedagang_controller extends CI_Controller
 
     function addPedagang(){
         $obj= json_decode(file_get_contents('php://input'),true);
-        $noPonselPedagang=$obj['noPonselPedagang'];
-        $passwordPedagang=$obj['passwordPedagang'];
+        $noPonselPedagang= (String) $obj['noPonselPedagang'];
+        $passwordPedagang=(String) $obj['passwordPedagang'];
 
         $kodeAkses = $this->verifikasiController->createKodeAkses();
         $waktuKadaluarsa = $this->verifikasiController->createWaktuKadaluarsa();

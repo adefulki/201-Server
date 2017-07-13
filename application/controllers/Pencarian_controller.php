@@ -45,37 +45,40 @@ class Pencarian_controller extends CI_Controller
         $arr=array();
 
         switch ($filter){
-            case "0" :{
-                foreach ($this->pedagangModel->selectAllPedagangByKataKunci($kataKunci) as $item){
-                    $arr[$i]=array(
-                        'id' => $item['idPedagang'],
-                        'nama' => $item['namaPedagang'],
-                        'foto' => $item['fotoPedagang'],
-                        'jarak' => $this->haversine_formula($latPembeli,$lngPembeli,$item['latDagangan'],$item['lngDagangan'])
-                    );
-                    $i++;
-                }
-                break;
-            }
             case "1" : {
+                //dagangan
                 foreach ($this->daganganModel->selectAllDaganganByKataKunci($kataKunci) as $item){
                     $arr[$i]=array(
                         'id' => $item['idDagangan'],
                         'nama' => $item['namaDagangan'],
                         'foto' => $item['fotoDagangan'],
-                        'jarak' => $this->haversine_formula($latPembeli,$lngPembeli,$item['latDagangan'],$item['lngDagangan'])
+                        'jarakHaversine' => $this->checkHaversineFormula($latPembeli,$lngPembeli,$item['latDagangan'],$item['lngDagangan'])
                     );
                     $i++;
                 }
                 break;
             }
             case "2" : {
+                //produk
                 foreach ($this->produkModel->selectAllProdukByKataKunci($kataKunci) as $item){
                     $arr[$i]=array(
                         'id' => $item['idProduk'],
                         'nama' => $item['namaProduk'],
                         'foto' => $item['fotoProduk'],
-                        'jarak' => $this->checkHaversineFormula($latPembeli,$lngPembeli,$item['latDagangan'],$item['lngDagangan'])
+                        'jarakHaversine' => $this->checkHaversineFormula($latPembeli,$lngPembeli,$item['latDagangan'],$item['lngDagangan'])
+                    );
+                    $i++;
+                }
+                break;
+            }
+            case "3" :{
+                //pedagang
+                foreach ($this->pedagangModel->selectAllPedagangByKataKunci($kataKunci) as $item){
+                    $arr[$i]=array(
+                        'id' => $item['idPedagang'],
+                        'nama' => $item['namaPedagang'],
+                        'foto' => $item['fotoPedagang'],
+                        'jarakHaversine' => $this->checkHaversineFormula($latPembeli,$lngPembeli,$item['latDagangan'],$item['lngDagangan'])
                     );
                     $i++;
                 }

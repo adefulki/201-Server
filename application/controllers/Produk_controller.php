@@ -30,13 +30,14 @@ class Produk_controller extends CI_Controller
 
     function addProduk(){
         $obj= json_decode(file_get_contents('php://input'),true);
+        $idDagangan=$obj['idDagangan'];
         $namaProduk=$obj['namaProduk'];
         $deskripsiProduk=$obj['deskripsiProduk'];
         $fotoProduk=$obj['fotoProduk'];
         $hargaProduk=$obj['hargaProduk'];
         $satuanProduk=$obj['satuanProduk'];
 
-
+        $this->produkModel->insertProduk($idDagangan, $namaProduk, $deskripsiProduk, $fotoProduk, $hargaProduk, $satuanProduk);
     }
 
     function getProduk(){
