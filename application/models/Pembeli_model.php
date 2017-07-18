@@ -36,7 +36,7 @@ class Pembeli_model extends CI_Model
     }
 
     function updateStatusVerifikasiPembeli($idPembeli){
-        $result = $this->db->query("SELECT `statusVerifikasiPembeli` FROM `PEMBELI` WHERE `idPembeli` = $idPembeli")->row_array();
+        $result = $this->db->query("SELECT `statusVerifikasiPembeli` FROM `PEMBELI` WHERE `idPembeli` = '$idPembeli'")->row_array();
         $statusVerifikasiPembeli = $result['statusVerifikasiPembeli'];
         $statusVerifikasiPembeli = !$statusVerifikasiPembeli;
         $this->db->query("UPDATE `PEMBELI` SET `statusVerifikasiPembeli`='$statusVerifikasiPembeli' WHERE `idPembeli` = '$idPembeli'");
@@ -59,7 +59,7 @@ class Pembeli_model extends CI_Model
     }
 
     function selectIdPembeliByNoPonselPembeli($noPonselPembeli){
-        return $this->db->query("SELECT PEMBELI.idPembeli FROM PEMBELI WHERE PEMBELI.noPonselPembeli = '$noPonselPembeli'")->row_array();
+        return $this->db->query("SELECT idPembeli FROM PEMBELI WHERE noPonselPembeli = '$noPonselPembeli'")->row_array();
     }
 
     function isValidAccount($noPonselPembeli,$passwordPembeli){

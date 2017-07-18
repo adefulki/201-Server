@@ -47,7 +47,7 @@ class Pedagang_model extends CI_Model
     }
 
     function updateStatusVerifikasiPedagang($idPedagang){
-        $result = $this->db->query("SELECT `statusVerifikasiPedagang` FROM `PEDAGANG` WHERE `idPedagang` = $idPedagang")->row_array();
+        $result = $this->db->query("SELECT `statusVerifikasiPedagang` FROM `PEDAGANG` WHERE `idPedagang` = '$idPedagang'")->row_array();
         $statusVerifikasiPedagang = $result['statusVerifikasiPedagang'];
         $statusVerifikasiPedagang = !$statusVerifikasiPedagang;
         $this->db->query("UPDATE `PEDAGANG` SET `statusVerifikasiPedagang`='$statusVerifikasiPedagang' WHERE `idPedagang` = '$idPedagang'");

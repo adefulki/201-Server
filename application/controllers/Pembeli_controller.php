@@ -91,8 +91,8 @@ class Pembeli_controller extends CI_Controller
 
     function addPembeli(){
         $obj= json_decode(file_get_contents('php://input'),true);
-        $noPonselPembeli=$obj['noPonselPembeli'];
-        $passwordPembeli=$obj['passwordPembeli'];
+        $noPonselPembeli=(string)$obj['noPonselPembeli'];
+        $passwordPembeli=(string)$obj['passwordPembeli'];
 
         $kodeAkses = $this->verifikasiController->createKodeAkses();
         $waktuKadaluarsa = $this->verifikasiController->createWaktuKadaluarsa();
@@ -120,7 +120,20 @@ class Pembeli_controller extends CI_Controller
         $passwordPembeli=$obj['passwordPembeli'];
         $statusValidPassword = $this->pembeliModel->isValidPasswordPembeli($idPembeli,$passwordPembeli);
 
-        $arr = array('statusValidPassword'<=$statusValidPassword);
+        $arr = array('statusValidPassword'=>$statusValidPassword);
+
+        header('Content-Type: application/json');
+        echo json_encode($arr);
+    }
+
+    function getIdPembeliByNoPonselPembeli()
+    {
+        $obj = json_decode(file_get_contents('php://input'), true);
+        $noPonselPembeli = $obj['noPonselPembeli'];
+
+        $pembeli = $this->pembeliModel->selectIdPembeliByNoPonselPembeli($noPonselPembeli);
+        $idPembeli = $pembeli['idPembeli'];
+        $arr=array('idPembeli'=>$idPembeli);
 
         header('Content-Type: application/json');
         echo json_encode($arr);

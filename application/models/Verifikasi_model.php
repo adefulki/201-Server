@@ -30,7 +30,7 @@ class Verifikasi_model extends CI_Model
 
     function insertVerifikasiPembeli($idPembeli, $kodeAkses, $waktuKadaluarsa){
         $idVerifikasi = uniqid();
-        $this->db->query("INSERT INTO `VERIFIKASI`(`idVrifikasi`, `idPembeli`, `kodeAkses`, `waktuKadaluarsa`) VALUES ('$idVerifikasi', '$idPembeli', '$kodeAkses', '$waktuKadaluarsa')");
+        $this->db->query("INSERT INTO `VERIFIKASI`(`idVerifikasi`, `idPembeli`, `kodeAkses`, `waktuKadaluarsa`) VALUES ('$idVerifikasi', '$idPembeli', '$kodeAkses', '$waktuKadaluarsa')");
     }
 
     function deleteVerifikasi($idPembeli, $idPedagang){
@@ -39,5 +39,13 @@ class Verifikasi_model extends CI_Model
 
     function selectAllVerifikasi(){
         return $this->db->query("SELECT * FROM `VERIFIKASI`")->result_array();
+    }
+
+    function updateVerifikasiPembeli($idPembeli,$kodeAkses,$waktuKadaluarsa){
+        $this->db->query("UPDATE `VERIFIKASI` SET `kodeAkses`='$kodeAkses', `waktuKadaluarsa`='$waktuKadaluarsa' WHERE `idPembeli` = '$idPembeli'");
+    }
+
+    function updateVerifikasiPedagang($idPedagang,$kodeAkses,$waktuKadaluarsa){
+        $this->db->query("UPDATE `VERIFIKASI` SET `kodeAkses`='$kodeAkses', `waktuKadaluarsa`='$waktuKadaluarsa' WHERE `idPedagang` = '$idPedagang'");
     }
 }

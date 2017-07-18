@@ -169,4 +169,17 @@ class Dagangan_controller extends CI_Controller
         $this->daganganModel->updateLokasiDagangan($idDagangan, $latDagangan, $lngDagangan);
     }
 
+    function randomLokasiDagangan(){
+        foreach ($this->daganganModel->selectAllDagangan() as $item){
+            $latMin=-5.885270;
+            $lngMin=106.106868;
+
+            $latMax=-7.644141;
+            $lngMax=108.752211;
+
+            $lat = $latMin + ($latMax - $latMin) * (mt_rand() / mt_getrandmax());
+            $lng = $lngMin + ($lngMax - $lngMin) * (mt_rand() / mt_getrandmax());
+            $this->daganganModel->updateLokasiDagangan($item['idDagangan'],$lat,$lng);
+        }
+    }
 }

@@ -34,14 +34,16 @@ class Verifikasi_controller extends CI_Controller
 
     function checkKodeAksesPedagang(){
         $obj=json_decode(file_get_contents('php://input'), true);
-        $idPedagang= $obj['idPedagang'];
+        $noPonselPedagang= $obj['noPonselPedagang'];
         $kodeAkses= $obj['kodeAkses'];
 
-        $statusValid = $this->verifikasiModel->isValidVerifikasi($idPedagang,"",$kodeAkses);
+        $pedagang = $this->pedagangModel->selectIdPedagangByNoPonselPedagang($noPonselPedagang);
+
+        $statusValid = $this->verifikasiModel->isValidVerifikasi($pedagang['idPedagang'],"",$kodeAkses);
 
         if ($statusValid == true){
-            $this->pedagangModel->updateStatusVerifikasiPedagang($idPedagang);
-            $this->verifikasiModel->deleteVerifikasi(null,$idPedagang);
+            $this->pedagangModel->updateStatusVerifikasiPedagang($pedagang['idPedagang']);
+            $this->verifikasiModel->deleteVerifikasi(null,$pedagang['idPedagang']);
         }
 
         $arr=array('statusValid'=>$statusValid);
@@ -52,14 +54,16 @@ class Verifikasi_controller extends CI_Controller
 
     function checkKodeAksesPembeli(){
         $obj=json_decode(file_get_contents('php://input'), true);
-        $idPembeli= $obj['idPembeli'];
+        $noPonselPembeli= $obj['noPonselPembeli'];
         $kodeAkses= $obj['kodeAkses'];
 
-        $statusValid = $this->verifikasiModel->isValidVerifikasi("",$idPembeli,$kodeAkses);
+        $pembeli = $this->pembeliModel->selectIdPembeliByNoPonselPembeli($noPonselPembeli);
+
+        $statusValid = $this->verifikasiModel->isValidVerifikasi("",$pembeli['idPembeli'],$kodeAkses);
 
         if ($statusValid == true){
-            $this->pembeliModel->updateStatusVerifikasiPembeli($idPembeli);
-            $this->verifikasiModel->deleteVerifikasi($idPembeli,null);
+            $this->pembeliModel->updateStatusVerifikasiPembeli($pembeli['idPembeli']);
+            $this->verifikasiModel->deleteVerifikasi($pembeli['idPembeli'],null);
         }
         $arr=array('statusValid'=>$statusValid);
 
@@ -98,5 +102,25 @@ class Verifikasi_controller extends CI_Controller
                 $this->verifikasiModel->deleteVerifikasi($item['idPembeli'],$item['idPedagang']);
             }
         }
+    }
+
+    function recreateKodeAksesPembeli(){
+        $obj=json_decode(file_get_contents('php://input'), true);
+        $noPonselPembeli= $obj['noPonselPembeli'];
+        $pembeli=$this->pembeliModel->selectIdPembeliByNoPonselPembeli($noPonselPembeli);
+        $kodeAkses = $this->createKodeAkses();
+        $waktuKadaluarsa = $this->createWaktuKadaluarsa();
+        $this->verifikasiModel->updateVerifikasiPembeli($pembeli["idPembeli"],$kodeAkses,$waktuKadaluarsa);
+        $this->sendVerifikasi($noPonselPembeli,$kodeAkses,$waktuKadaluarsa);
+    }
+
+    function recreateKodeAksesPedagang(){
+        $obj=json_decode(file_get_contents('php://input'), true);
+        $noPonselPedagang= $obj['noPonselPedagang'];
+        $pedagang=$this->pedagangModel->selectIdPedagangByNoPonselPedagang($noPonselPedagang);
+        $kodeAkses = $this->createKodeAkses();
+        $waktuKadaluarsa = $this->createWaktuKadaluarsa();
+        $this->verifikasiModel->updateVerifikasiPedagang($pedagang["idPedagang"],$kodeAkses,$waktuKadaluarsa);
+        $this->sendVerifikasi($noPonselPedagang,$kodeAkses,$waktuKadaluarsa);
     }
 }
