@@ -123,6 +123,7 @@ class Pembeli_controller extends CI_Controller
     }
 
     function checkPasswordPembeli(){
+//        Sudah di cek di server
         $obj= json_decode(file_get_contents('php://input'),true);
         $idPembeli=$obj['idPembeli'];
         $passwordPembeli=$obj['passwordPembeli'];
