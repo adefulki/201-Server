@@ -54,6 +54,10 @@ class Pedagang_model extends CI_Model
         $this->db->query("UPDATE `PEDAGANG` SET `statusVerifikasiPedagang`='$statusVerifikasiPedagang' WHERE `idPedagang` = '$idPedagang'");
     }
 
+    function updateUserIdPedagang($idPedagang, $userIdPedagang){
+        $this->db->query("UPDATE `PEDAGANG` SET `userId`='$userIdPedagang' WHERE `idPedagang` = '$idPedagang'");
+    }
+
     function insertPedagang($noPonselPedagang, $passwordPedagang){
         $idPedagang = uniqid();
         $this->db->query("INSERT INTO `PEDAGANG`(`idPedagang`, `noPonselPedagang`, `passwordPedagang`, `statusVerifikasiPedagang`) VALUES

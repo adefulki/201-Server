@@ -136,7 +136,7 @@ class Dagangan_controller extends CI_Controller
             'tipeDagangan' => (Boolean) $itemDagangan['tipeDagangan'],
             'statusBerjualan' => (Boolean) $itemDagangan['statusBerjualan'],
             'countPelanggan' => $this->pelangganModel->countPelanggan($itemDagangan['idDagangan']),
-            'statusBerlangganan' => (Boolean) $this->pelangganModel->isBerlangganan($idPembeli, $itemDagangan['idDagangan']),
+            'statusBerlangganan' => (Boolean) $this->pelangganModel->isBerlangganan($itemDagangan['idDagangan'],$idPembeli),
             'statusNotifikasi' => (Boolean) $this->notifikasiModel->isNotifikasi($idPembeli, $itemDagangan['idDagangan']),
             'meanPenilaianDagangan' => $this->penilaianController->meanPenilaian($itemDagangan['idDagangan']),
             'countPenilaianDagangan' => $this->penilaianModel->countPenilaian($itemDagangan['idDagangan']),

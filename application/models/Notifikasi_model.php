@@ -29,7 +29,7 @@ class Notifikasi_model extends CI_Model
 
     function isNotifikasi($idPembeli, $idDagangan){
         if($this->db->query("SELECT * FROM NOTIFIKASI WHERE NOTIFIKASI.idDagangan = '$idDagangan' AND 
-                            NOTIFIKASI.idPembeli = '$idPembeli'")->num_rows()>0)
+                            NOTIFIKASI.idPembeli = '$idPembeli' AND NOTIFIKASI.statusNotifikasi = TRUE ")->num_rows()>0)
             return true;
         else
             return false;

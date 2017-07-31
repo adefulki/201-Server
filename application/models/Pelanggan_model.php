@@ -17,7 +17,7 @@ class Pelanggan_model extends CI_Model
 
     function isBerlangganan($idDagangan, $idPembeli){
         if($this->db->query("SELECT * FROM PELANGGAN WHERE PELANGGAN.idDagangan = '$idDagangan' AND 
-                            PELANGGAN.idPembeli = '$idPembeli'")->num_rows()>0)
+                            PELANGGAN.idPembeli = '$idPembeli' ")->num_rows()>0)
             return true;
         else
             return false;
