@@ -43,6 +43,7 @@ class Pedagang_model extends CI_Model
     }
 
     function updateFotoPedagang($idPedagang, $fotoPedagang){
+//        aman
         $this->db->query("UPDATE `PEDAGANG` SET `fotoPedagang`='$fotoPedagang' WHERE `idPedagang` = '$idPedagang'");
     }
 

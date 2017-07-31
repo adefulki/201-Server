@@ -35,6 +35,8 @@ class Pembeli_controller extends CI_Controller
 
     function editNamaPembeli()
     {
+
+//        Sudah di cek Server
         $obj= json_decode(file_get_contents('php://input'),true);
 
         $idPembeli=$obj['idPembeli'];
@@ -45,6 +47,7 @@ class Pembeli_controller extends CI_Controller
 
     function editEmailPembeli()
     {
+        //        Sudah di cek Server
         $obj= json_decode(file_get_contents('php://input'),true);
 
         $idPembeli=$obj['idPembeli'];
@@ -55,6 +58,7 @@ class Pembeli_controller extends CI_Controller
 
     function editPasswordPembeli()
     {
+//        Sudah di cek server
         $obj= json_decode(file_get_contents('php://input'),true);
 
         $idPembeli=$obj['idPembeli'];
@@ -65,6 +69,7 @@ class Pembeli_controller extends CI_Controller
 
     function editAlamatPembeli()
     {
+//        sudah di cek server
         $obj= json_decode(file_get_contents('php://input'),true);
 
         $idPembeli=$obj['idPembeli'];
@@ -75,6 +80,7 @@ class Pembeli_controller extends CI_Controller
 
     function editNoPonselPembeli()
     {
+//        sudah di cek di server
         $obj= json_decode(file_get_contents('php://input'),true);
         $idPembeli=$obj['idPembeli'];
         $noPonselPembeli=$obj['noPonselPembeli'];
@@ -91,6 +97,7 @@ class Pembeli_controller extends CI_Controller
 
     function editFotoPembeli()
     {
+//        sudah di cek server, aman
         $obj= json_decode(file_get_contents('php://input'),true);
 
         $idPembeli=$obj['idPembeli'];
@@ -115,6 +122,7 @@ class Pembeli_controller extends CI_Controller
     }
 
     function editDetailPembeli(){
+//        Sudah di cek server
         $obj= json_decode(file_get_contents('php://input'),true);
         $idPembeli=$obj['idPembeli'];
         $namaPembeli=$obj['namaPembeli'];
@@ -125,6 +133,7 @@ class Pembeli_controller extends CI_Controller
     }
 
     function checkPasswordPembeli(){
+//        Sudah di cek di server
         $obj= json_decode(file_get_contents('php://input'),true);
         $idPembeli=$obj['idPembeli'];
         $passwordPembeli=$obj['passwordPembeli'];

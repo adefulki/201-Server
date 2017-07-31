@@ -79,7 +79,7 @@ class Penilaian_controller extends CI_Controller
         $sum=0;
         $i=0;
         foreach ($this->penilaianModel->selectPenilaianProduk($idProduk) as $item) {
-            $value = $item['nilaiProduk'];
+            $value = $item['nilaiPenilaian'];
             $sum = $sum + $value;
             $i++;
         }
