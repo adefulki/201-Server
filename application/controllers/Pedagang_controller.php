@@ -80,6 +80,16 @@ class Pedagang_controller extends CI_Controller
         $this->verifikasiController->sendVerifikasi($noPonselPedagang,$kodeAkses,$waktuKadaluarsa);
     }
 
+    function editUserIdPedagang()
+    {
+        $obj= json_decode(file_get_contents('php://input'),true);
+
+        $idPedagang=$obj['idPedagang'];
+        $userIdPedagang=$obj['userIdPedagang'];
+
+        $this->pedagangModel->updateUserIdPedagang($idPedagang,$userIdPedagang);
+    }
+
     function editFotoPedagang()
     {
 

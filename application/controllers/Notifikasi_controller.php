@@ -111,5 +111,4 @@ class Notifikasi_controller extends CI_Controller
             return $response;
     }
 
-
 }

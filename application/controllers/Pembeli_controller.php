@@ -106,6 +106,16 @@ class Pembeli_controller extends CI_Controller
         $this->pembeliModel->updateFotoPembeli($idPembeli,$fotoPembeli);
     }
 
+    function editUserIdPembeli()
+    {
+        $obj= json_decode(file_get_contents('php://input'),true);
+
+        $idPembeli=$obj['idPembeli'];
+        $userIdPembeli=$obj['userIdPembeli'];
+
+        $this->pembeliModel->updateUserIdPembeli($idPembeli,$userIdPembeli);
+    }
+
     function addPembeli(){
         $obj= json_decode(file_get_contents('php://input'),true);
         $noPonselPembeli=(string)$obj['noPonselPembeli'];

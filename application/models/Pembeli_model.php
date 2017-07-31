@@ -35,6 +35,14 @@ class Pembeli_model extends CI_Model
         $this->db->query("UPDATE `PEMBELI` SET `fotoPembeli`='$fotoPembeli' WHERE `idPembeli` = '$idPembeli'");
     }
 
+    function updateUserIdPembeli($idPembeli, $userIdPembeli){
+        $this->db->query("UPDATE `PEMBELI` SET `userId`='$userIdPembeli' WHERE `idPembeli` = '$idPembeli'");
+    }
+
+    function updateLokasiPembeli($idPembeli, $latPembeli, $lngPembeli){
+        $this->db->query("UPDATE `PEMBELI` SET `latPembeli` = '$latPembeli', `lngPembeli` = '$lngPembeli' WHERE `idPembeli` = '$idPembeli'");
+    }
+
     function updateStatusVerifikasiPembeli($idPembeli){
         $result = $this->db->query("SELECT `statusVerifikasiPembeli` FROM `PEMBELI` WHERE `idPembeli` = '$idPembeli'")->row_array();
         $statusVerifikasiPembeli = $result['statusVerifikasiPembeli'];
