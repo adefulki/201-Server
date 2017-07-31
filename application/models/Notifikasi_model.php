@@ -10,16 +10,21 @@ class Notifikasi_model extends CI_Model
     {
         parent::__construct();
     }
-    
+
+    function selectAllNotifikasi(){
+        return $this->db->query("SELECT * FROM NOTIFIKASI,PEMBELI WHERE NOTIFIKASI.statusNotifikasi = TRUE AND NOTIFIKASI.idPembeli = PEMBELI.idPembeli")->result_array();
+    }
     function updateNotifikasi($idPembeli, $idDagangan, $jarakNotifikasi, $statusNotifikasi){
         $this->db->query("UPDATE `NOTIFIKASI` SET `jarakNotifikasi`='$jarakNotifikasi', `statusNotifikasi`='$statusNotifikasi' WHERE `idPembeli` = '$idPembeli' AND `idDagangan` = '$idDagangan'");
     }
 
     function selectNotifikasiPembeli($idPembeli){
-        return $this->db->query("SELECT NOTIFIKASI.idDagangan, DAGANGAN.latDagangan,
-                                DAGANGAN.lngDagangan, NOTIFIKASI.jarakNotifikasi FROM
-                                `NOTIFIKASI`, `DAGANGAN` WHERE DAGANGAN.idPembeli ='$idPembeli' 
-                                AND NOTIFIKASI.idDagangan = DAGANGAN.idDagangan ")->result_array();
+        return $this->db->query("SELECT NOTIFIKASI.idDagangan, DAGANGAN.latDagangan,DAGANGAN.lngDagangan, 
+                                NOTIFIKASI.jarakNotifikasi FROM
+                                `NOTIFIKASI`, `DAGANGAN` WHERE NOTIFIKASI.idDagangan = DAGANGAN.idDagangan
+                                AND NOTIFIKASI.idPembeli ='$idPembeli' ")->result_array();
+
+
     }
 
     function isNotifikasi($idPembeli, $idDagangan){
