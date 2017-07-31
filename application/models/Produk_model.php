@@ -28,7 +28,11 @@ class Produk_model extends CI_Model
 
     function insertProduk($idDagangan, $namaProduk, $deskripsiProduk, $fotoProduk, $hargaProduk, $satuanProduk){
         $idProduk = uniqid();
-        $this->db->query("INSERT INTO `PRODUK  (`idProduk`, `idDagangan`, `namaProduk`, `deskripsiProduk`, `fotoProduk`, `hargaProduk`, `satuanProduk`) VALUES 
+        $this->db->query("INSERT INTO `PRODUK`  (`idProduk`, `idDagangan`, `namaProduk`, `deskripsiProduk`, `fotoProduk`, `hargaProduk`, `satuanProduk`) VALUES 
                         ('$idProduk', '$idDagangan', '$namaProduk', '$deskripsiProduk', '$fotoProduk', '$hargaProduk', '$satuanProduk')");
+    }
+
+    function deleteProduk($idProduk){
+        $this->db->query("DELETE FROM `PRODUK` WHERE `idProduk` = '$idProduk'");
     }
 }

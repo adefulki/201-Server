@@ -23,4 +23,12 @@ class Pelanggan_model extends CI_Model
             return false;
 
     }
+
+    function addPelanggan($idPembeli, $idDagangan, $waktuBerlangganan){
+        $this->db->query("INSERT INTO `PELANGGAN`(`idPembeli`, `idDagangan`, `waktuBerlangganan`) VALUES ('$idPembeli','$idDagangan','$waktuBerlangganan')");
+    }
+
+    function deletePelanggan($idPembeli, $idDagangan){
+        $this->db->query("DELETE FROM `PELANGGAN` WHERE idPembeli = '$idPembeli' AND idDagangan = '$idDagangan'");
+    }
 }

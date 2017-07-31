@@ -11,8 +11,8 @@ class Notifikasi_model extends CI_Model
         parent::__construct();
     }
     
-    function updateNotifikasi($idNotifikasi, $jarakNotifikasi, $statusNotifikasi){
-        $this->db->query("UPDATE `NOTIFIKASI` SET `jarakNotifikasi`='$jarakNotifikasi', `statusNotifikasi`='$statusNotifikasi' WHERE `idNotifikasi` = '$idNotifikasi'");
+    function updateNotifikasi($idPembeli, $idDagangan, $jarakNotifikasi, $statusNotifikasi){
+        $this->db->query("UPDATE `NOTIFIKASI` SET `jarakNotifikasi`='$jarakNotifikasi', `statusNotifikasi`='$statusNotifikasi' WHERE `idPembeli` = '$idPembeli' AND `idDagangan` = '$idDagangan'");
     }
 
     function selectNotifikasiPembeli($idPembeli){
@@ -20,5 +20,24 @@ class Notifikasi_model extends CI_Model
                                 DAGANGAN.lngDagangan, NOTIFIKASI.jarakNotifikasi FROM
                                 `NOTIFIKASI`, `DAGANGAN` WHERE DAGANGAN.idPembeli ='$idPembeli' 
                                 AND NOTIFIKASI.idDagangan = DAGANGAN.idDagangan ")->result_array();
+    }
+
+    function isNotifikasi($idPembeli, $idDagangan){
+        if($this->db->query("SELECT * FROM NOTIFIKASI WHERE NOTIFIKASI.idDagangan = '$idDagangan' AND 
+                            NOTIFIKASI.idPembeli = '$idPembeli'")->num_rows()>0)
+            return true;
+        else
+            return false;
+
+    }
+
+    function addNotifikasi($idPembeli, $idDagangan){
+        $idNotifikasi = uniqid();
+        $this->db->query("INSERT INTO `NOTIFIKASI`(`idNotifikasi`, `idPembeli`, `idDagangan`, `statusNotifikasi`, `jarakNotifikasi`) 
+                          VALUES ('$idNotifikasi','$idPembeli','$idDagangan',FALSE ,0)");
+    }
+
+    function deleteNotifikasi($idPembeli, $idDagangan){
+        $this->db->query("DELETE FROM `NOTIFIKASI` WHERE idPembeli = '$idPembeli' AND idDagangan = '$idDagangan'");
     }
 }

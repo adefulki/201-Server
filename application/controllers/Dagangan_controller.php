@@ -12,6 +12,7 @@ class Dagangan_controller extends CI_Controller
 {
     private $daganganModel;
     private $penilaianModel;
+    private $notifikasiModel;
     private $produkModel;
     private $pedagangModel;
     private $pelangganModel;
@@ -21,6 +22,8 @@ class Dagangan_controller extends CI_Controller
         parent::__construct();
         $this->load->model('Penilaian_model','',True);
         $this->penilaianModel = new Penilaian_model();
+        $this->load->model('Notifikasi_model','',True);
+        $this->notifikasiModel = new Notifikasi_model();
         $this->load->model('Dagangan_model','',True);
         $this->daganganModel = new Dagangan_model();
         $this->load->model('Produk_model','',True);
@@ -98,6 +101,18 @@ class Dagangan_controller extends CI_Controller
         $i=0;
         $arr_produk=array();
         foreach($this->produkModel->selectProdukDagangan($idDagangan) as $item) {
+            $j=0;
+            $arr_penilaian=array();
+            foreach ($this->penilaianModel->selectPenilaianProduk($item['idProduk']) as $item2) {
+                $arr_penilaian[$j]=array(
+                    'idPenilaian' => $item2['idPenilaian'],
+                    'idPembeli' => $item2['idPembeli'],
+                    'nilaiPenilaian' => $item2['nilaiPenilaian'],
+                    'deskripsiPenilaian' => $item2['deskripsiPenilaian']
+                );
+                $j++;
+            }
+
             $arr_produk[$i]=array(
                 'idProduk' => $item['idProduk'],
                 'namaProduk' => $item['namaProduk'],
@@ -107,19 +122,25 @@ class Dagangan_controller extends CI_Controller
                 'satuanProduk' => $item['satuanProduk'],
                 'meanPenilaianProduk' => $this->penilaianController->meanPenilaianProduk($item['idProduk']),
                 'countPenilaianProduk' => $this->penilaianModel->countPenilaianProduk($item['idProduk']),
+                'penilaian' => $arr_penilaian
             );
             $i++;
         }
         $arr=array(
             'idDagangan' => $itemDagangan['idDagangan'],
             'namaDagangan' => $itemDagangan['namaDagangan'],
+            'deskripsiDagangan' => $itemDagangan['deskripsiDagangan'],
             'fotoDagangan' => $itemDagangan['fotoDagangan'],
             'latDagangan' => $itemDagangan['latDagangan'],
             'lngDagangan' => $itemDagangan['lngDagangan'],
-            'tipeDagangan' => $itemDagangan['tipeDagangan'],
-            'statusBerjualan' => $itemDagangan['statusBerjualan'],
-            'countPelanggan' => $this->pelangganModel->countPelanggan($idDagangan),
-            'statusBerlangganan' => $this->pelangganModel->isBerlangganan($idPembeli, $idDagangan),
+            'tipeDagangan' => (Boolean) $itemDagangan['tipeDagangan'],
+            'statusBerjualan' => (Boolean) $itemDagangan['statusBerjualan'],
+            'countPelanggan' => $this->pelangganModel->countPelanggan($itemDagangan['idDagangan']),
+            'statusBerlangganan' => (Boolean) $this->pelangganModel->isBerlangganan($idPembeli, $itemDagangan['idDagangan']),
+            'statusNotifikasi' => (Boolean) $this->notifikasiModel->isNotifikasi($idPembeli, $itemDagangan['idDagangan']),
+            'meanPenilaianDagangan' => $this->penilaianController->meanPenilaian($itemDagangan['idDagangan']),
+            'countPenilaianDagangan' => $this->penilaianModel->countPenilaian($itemDagangan['idDagangan']),
+            'idPedagang' => $itemPedagang['idPedagang'],
             'namaPedagang' => $itemPedagang['namaPedagang'],
             'emailPedagang' => $itemPedagang['emailPedagang'],
             'noPonselPedagang' => $itemPedagang['noPonselPedagang'],
@@ -171,15 +192,25 @@ class Dagangan_controller extends CI_Controller
 
     function randomLokasiDagangan(){
         foreach ($this->daganganModel->selectAllDagangan() as $item){
-            $latMin=-5.885270;
-            $lngMin=106.106868;
+            $latMin=-6.810907;
+            $lngMin=107.538430;
 
-            $latMax=-7.644141;
-            $lngMax=108.752211;
+            $latMax=-6.962121;
+            $lngMax=107.7063973;
 
             $lat = $latMin + ($latMax - $latMin) * (mt_rand() / mt_getrandmax());
             $lng = $lngMin + ($lngMax - $lngMin) * (mt_rand() / mt_getrandmax());
             $this->daganganModel->updateLokasiDagangan($item['idDagangan'],$lat,$lng);
         }
+    }
+
+    function getIdDaganganByIdPedagang(){
+        $obj=json_decode(file_get_contents('php://input'), true);
+        $idPedagang=$obj['idPedagang'];
+
+        $dagangan = $this->daganganModel->selectIdDaganganByIdPedagang($idPedagang);
+        $arr=array('idDagangan'=>$dagangan["idDagangan"]);
+        header('Content-Type: application/json');
+        echo json_encode($arr);
     }
 }

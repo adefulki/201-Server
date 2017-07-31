@@ -22,11 +22,12 @@ class Notifikasi_controller extends CI_Controller
 
     function changeStatusNotifikasi(){
         $obj=json_decode(file_get_contents('php://input'), true);
-        $idNotifikasi=$obj['idNotifikasi'];
+        $idPembeli=$obj['idPembeli'];
+        $idDagangan=$obj['idDagangan'];
         $jarakNotifikasi=$obj['jarakNotifikasi'];
         $statusNotifikasi=$obj['statusNotifikasi'];
 
-        $this->notifikasiModel->updateNotifikasi($idNotifikasi, $jarakNotifikasi, $statusNotifikasi);
+        $this->notifikasiModel->updateNotifikasi($idPembeli, $idDagangan, $jarakNotifikasi, $statusNotifikasi);
     }
 
     //formula haversine untuk mengetahui jarak

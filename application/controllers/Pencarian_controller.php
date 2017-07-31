@@ -50,6 +50,7 @@ class Pencarian_controller extends CI_Controller
                 foreach ($this->daganganModel->selectAllDaganganByKataKunci($kataKunci) as $item){
                     $arr[$i]=array(
                         'id' => $item['idDagangan'],
+                        'idDagangan' => $item['idDagangan'],
                         'nama' => $item['namaDagangan'],
                         'foto' => $item['fotoDagangan'],
                         'jarakHaversine' => $this->checkHaversineFormula($latPembeli,$lngPembeli,$item['latDagangan'],$item['lngDagangan'])
@@ -63,6 +64,7 @@ class Pencarian_controller extends CI_Controller
                 foreach ($this->produkModel->selectAllProdukByKataKunci($kataKunci) as $item){
                     $arr[$i]=array(
                         'id' => $item['idProduk'],
+                        'idDagangan' => $item['idDagangan'],
                         'nama' => $item['namaProduk'],
                         'foto' => $item['fotoProduk'],
                         'jarakHaversine' => $this->checkHaversineFormula($latPembeli,$lngPembeli,$item['latDagangan'],$item['lngDagangan'])
@@ -76,6 +78,7 @@ class Pencarian_controller extends CI_Controller
                 foreach ($this->pedagangModel->selectAllPedagangByKataKunci($kataKunci) as $item){
                     $arr[$i]=array(
                         'id' => $item['idPedagang'],
+                        'idDagangan' => $item['idDagangan'],
                         'nama' => $item['namaPedagang'],
                         'foto' => $item['fotoPedagang'],
                         'jarakHaversine' => $this->checkHaversineFormula($latPembeli,$lngPembeli,$item['latDagangan'],$item['lngDagangan'])

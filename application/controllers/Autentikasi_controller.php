@@ -29,10 +29,10 @@ class Autentikasi_controller extends CI_Controller
 
         if($this->pedagangModel->isValidAccount($noPonsel,$password) == true) {
             $statusValid = true;
-            $role = 0;
+            $role = 1;
         }elseif($this->pembeliModel->isValidAccount($noPonsel,$password) == true){
             $statusValid = true;
-            $role = 1;
+            $role = 2;
         }
 
         $arr = array("statusValid" => $statusValid,

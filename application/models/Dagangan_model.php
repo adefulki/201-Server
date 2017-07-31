@@ -42,11 +42,15 @@ class Dagangan_model extends CI_Model
 
     function insertDagangan($idPedagang, $namaDagangan, $deskripsiDagangan, $fotoDagangan, $tipeDagangan){
         $idDagangan = uniqid();
-        $this->db->query("INSERT INTO `PRODUK`  (`idDagangan`, `idPedagang`, `namaDagangan`, `deskripsiDagangan`, `tipeDagangan`, `fotoDagangan`, `statusBerjualan`) VALUES 
+        $this->db->query("INSERT INTO `DAGANGAN`  (`idDagangan`, `idPedagang`, `namaDagangan`, `deskripsiDagangan`, `tipeDagangan`, `fotoDagangan`, `statusBerjualan`) VALUES 
                         ('$idDagangan', '$idPedagang', '$namaDagangan', '$deskripsiDagangan', '$tipeDagangan', '$fotoDagangan', False)");
     }
 
     function updateLokasiDagangan($idDagangan, $latDagangan, $lngDagangan){
         $this->db->query("UPDATE `DAGANGAN` SET `latDagangan` = '$latDagangan', `lngDagangan` = '$lngDagangan' WHERE `idDagangan` = '$idDagangan'");
+    }
+
+    function selectIdDaganganByIdPedagang($idPedagang){
+        return $this->db->query("SELECT DAGANGAN.idDagangan FROM DAGANGAN WHERE DAGANGAN.idPedagang = '$idPedagang'")->row_array();
     }
 }

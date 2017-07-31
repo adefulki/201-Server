@@ -101,10 +101,6 @@ class Penilaian_controller extends CI_Controller
 
     function penilaianProduk(){
         $obj= json_decode(file_get_contents('php://input'),true);
-
-        /*
-         * memisahkan atribut
-         */
         $idPembeli=$obj['idPembeli'];
         $idProduk=$obj['idProduk'];
         $nilaiPenilaian=$obj['nilaiPenilaian'];

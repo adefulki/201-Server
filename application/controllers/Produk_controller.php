@@ -46,14 +46,23 @@ class Produk_controller extends CI_Controller
         $arr = array();
         $i=0;
         foreach ($this->produkModel->selectProdukDagangan($idDagangan) as $item){
-            $arr[i]=array('idProduk'=>$item['idProduk'],
+            $arr[$i]=array('idProduk'=>$item['idProduk'],
                             'namaProduk'=>$item['namaProduk'],
                             'deskripsiProduk'=>$item['deskripsiProduk'],
-                            'fotoProduk'=>$item['fotoProduk']);
+                            'fotoProduk'=>$item['fotoProduk'],
+                            'hargaProduk'=>$item['hargaProduk'],
+                            'satuanProduk'=>$item['satuanProduk']);
             $i++;
         }
 
         header('Content-Type: application/json');
         echo json_encode($arr);
+    }
+
+    function removeProduk(){
+        $obj= json_decode(file_get_contents('php://input'),true);
+        $idProduk=$obj['idProduk'];
+
+        $this->produkModel->deleteProduk($idProduk);
     }
 }

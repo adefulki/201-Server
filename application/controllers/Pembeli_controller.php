@@ -23,6 +23,16 @@ class Pembeli_controller extends CI_Controller
         $this->verifikasiController = new Verifikasi_controller();
     }
 
+    function getPembeli(){
+        $obj= json_decode(file_get_contents('php://input'),true);
+
+        $idPembeli=$obj['idPembeli'];
+
+        $arr = $this->pembeliModel->selectPembeli($idPembeli);
+        header('Content-Type: application/json');
+        echo json_encode($arr);
+    }
+
     function editNamaPembeli()
     {
         $obj= json_decode(file_get_contents('php://input'),true);

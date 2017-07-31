@@ -68,4 +68,8 @@ class Pembeli_model extends CI_Model
             return true;
         else return false;
     }
+
+    function selectPembeli($idPembeli){
+        return $this->db->query("SELECT * FROM PEMBELI WHERE idPembeli = '$idPembeli'")->row_array();
+    }
 }
