@@ -57,8 +57,6 @@ class Notifikasi_controller extends CI_Controller
     }
 
     function checkNotifikasi(){
-        $obj=json_decode(file_get_contents('php://input'), true);
-
         foreach ($this->notifikasiModel->selectAllNotifikasi() as $obj) {
             $idPembeli=$obj['idPembeli'];
             $latPembeli=$obj['latPembeli'];
@@ -68,8 +66,8 @@ class Notifikasi_controller extends CI_Controller
                 $jarakHaversine = $this->checkHaversineFormula($latPembeli, $lngPembeli, $item['latDagangan'], $item['lngDagangan']);
                 $statusInRange = $this->checkDistance($jarakHaversine, $item['jarakNotifikasi']);
                 if ($statusInRange == true) {
-                    $text = 'belummmm';
-                    $this->obrolanModel->insertObrolan($item['latDagangan'], $idPembeli, $text, $idPembeli);
+                    $text = 'Pedagang telah berada di jangkauan';
+                    //$this->obrolanModel->insertObrolan($item['latDagangan'], $idPembeli, $text, $idPembeli);
                     $this->sendNotifikasi($userId, $text);
                 }
             }
@@ -86,7 +84,7 @@ class Notifikasi_controller extends CI_Controller
             );
 
             $fields = array(
-                'app_id' => "8b0d0429-41a3-40fe-836d-86658cce9744",
+                'app_id' => "e4ca5a78-475e-47bf-99f5-1bc0acd22501",
                 'include_player_ids' => array($userId),
                 'data' => array("foo" => "bar"),
                 'contents' => $content,
@@ -100,7 +98,7 @@ class Notifikasi_controller extends CI_Controller
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8',
-                'Authorization: Basic ZTdhZmUwYWMtZWU0MC00YWI3LTk4ODMtYWJjN2M1NTE4YjYz'));
+                'Authorization: Basic Mzk1MWM5NmUtYjdhYi00MzdjLWJmMWMtYzRhNTA1MmNhYmRl'));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
             curl_setopt($ch, CURLOPT_HEADER, FALSE);
             curl_setopt($ch, CURLOPT_POST, TRUE);
