@@ -82,12 +82,13 @@ class Pedagang_controller extends CI_Controller
 
     function editFotoPedagang()
     {
+
         $obj= json_decode(file_get_contents('php://input'),true);
 
         $idPedagang=$obj['idPedagang'];
         $fotoPedagang=$obj['fotoPedagang'];
 
-        $this->PedagangModel->updateFotoPedagang($idPedagang,$fotoPedagang);
+        $this->pedagangModel->updateFotoPedagang($idPedagang,$fotoPedagang);
     }
 
     function addPedagang(){
