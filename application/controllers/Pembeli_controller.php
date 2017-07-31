@@ -116,6 +116,16 @@ class Pembeli_controller extends CI_Controller
         $this->pembeliModel->updateUserIdPembeli($idPembeli,$userIdPembeli);
     }
 
+    function editLokasiPembeli(){
+        $obj= json_decode(file_get_contents('php://input'),true);
+
+        $idPembeli=$obj['idPembeli'];
+        $latPembeli=$obj['latPembeli'];
+        $lngPembeli=$obj['lngPembeli'];
+
+        $this->pembeliModel->updateLokasiPembeli($idPembeli,$latPembeli,$lngPembeli);
+    }
+
     function addPembeli(){
         $obj= json_decode(file_get_contents('php://input'),true);
         $noPonselPembeli=(string)$obj['noPonselPembeli'];
